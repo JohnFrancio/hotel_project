@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index.vue'
 import Hotel from '../views/Hotel.vue'
-import Inscription from '../views/inscription.vue'
 import Connexion from '../views/Connexion.vue'
 
 const routes = [
@@ -14,11 +13,6 @@ const routes = [
     path: '/hotel',
     name: 'Hotel',
     component: Hotel
-  },
-  {
-    path: '/inscription',
-    name: 'Inscription',
-    component: Inscription
   },
   {
     path: '/connexion',

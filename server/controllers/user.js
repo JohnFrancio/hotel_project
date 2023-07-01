@@ -38,7 +38,7 @@ const createUser = (req, res) => {
 const updateUser = (req, res) => {
     User.updatedUser(req.body, req.params.id, (err, results) => {
         if (err) {
-            res.send(err);
+            res.json(err);
         }else {
             res.json(results);
         }

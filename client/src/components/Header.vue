@@ -3,7 +3,7 @@
     >
           <v-img
             class="ml-5"
-            src="../assets/h1_2.jpg"
+            src="../assets/img/h1_2.jpg"
             max-height="60"
             max-width="30"
             ></v-img>

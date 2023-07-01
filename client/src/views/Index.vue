@@ -5,7 +5,7 @@
       <v-card>
         <v-img
           style="border-radius=25px;"
-          src="../assets/cover1.jpg"
+          src="../assets/img/cover1.jpg"
           class="align-end"
           height="580px"
           cover
@@ -20,8 +20,8 @@
                 lg="7"
                 sm="12"
               >
-              <p align="center" class="text-h4 text-md-h2 text-lg-h2 font-weight-bold">Bienvenue sur <span class="text-#0862a0" style="color:#0862a0;">HOTELINAO</span></p>
-              <p align="center" class="text-h5 text-md-h3 text-lg-h3 font-weight-bold mb-3">Un site fait pour vous</p>
+              <p align="center" class="text-h4 text-md-h2 text-lg-h2">Bienvenue sur <span class="text-#0862a0" style="color:#0862a0;">HOTELINAO</span></p>
+              <p align="center" class="text-h5 text-white text-md-h3 text-lg-h3 mb-3">Un site fait pour vous</p>
               <p align="center" class="mb-4 text-h6 font-weight-thin text-white">Venez explorer Madagascar et ces differents hotels avec nous. Trouvez selon vos gout, vos budget, vos horaires.
               Ensemble, cherchons l'hotel de vos reves</p>
               <div class="text-center">

@@ -41,7 +41,7 @@ const insertUser = async (data, result) => {
 
 // updated user to database
 const updatedUser = (data, id, result) => {
-    db.query('UPDATE user SET nom_complet = ?, tel_user = ? WHERE id_user =?', [data.nom_complet, data.tel_user, id], (err, results) => {
+    db.query('UPDATE user SET nom_complet = ?, contact_user = ? WHERE id_user =?', [data.nom_complet, data.tel_user, id], (err, results) => {
             if (err) {
                 console.log(err);
             } else {

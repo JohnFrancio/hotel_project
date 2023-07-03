@@ -27,7 +27,7 @@ const getUserById = (req, res) => {
 const createUser = (req, res) => {
     User.insertUser(req.body, (err, results) => {
         if (err) {
-            res.send(err);
+            res.json(err);
         }else {
             res.json(results);
         }

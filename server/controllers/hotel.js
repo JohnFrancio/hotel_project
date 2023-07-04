@@ -3,11 +3,10 @@ const hotelModel = require('../models/hotel');
 //get all hotels
 const getAllHotels = (req, res) => {
     hotelModel.getAllHotels((err,result)=>{
-        if(err){
-            res.send(err);
-        }else{
-            res.json(result);
+        if (err) {
+            return res.send(err.sqlMessage);
         }
+        return res.json(result);
     })
 };
 
@@ -15,10 +14,9 @@ const getAllHotels = (req, res) => {
 const getHotelById = (req, res) => {
     hotelModel.getHotelById(req.params.id, (err, result) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(result);
+            return res.send(err.sqlMessage);
         }
+        return res.json(result);
     })
 }
 
@@ -26,10 +24,9 @@ const getHotelById = (req, res) => {
 const createHotel = (req, res) => {
     hotelModel.insertHotel(req.body, (err, result) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(result);
+            return res.send(err.sqlMessage);
         }
+        return res.json(result);
     })
 }
 
@@ -39,15 +36,13 @@ const updateHotel = (req, res) => {
         nom_hotel: req.body.nom_hotel,
         adresse_hotel: req.body.adresse_hotel,
         contact_hotel: req.body.contact_hotel,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude
+        mdp_hotel: req.body.mdp_hotel
     }
     hotelModel.updateHotel(data, req.params.id, (err, result) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(result);
+            return res.send(err.sqlMessage);
         }
+        return res.json(result);
     })
 }
 
@@ -55,10 +50,9 @@ const updateHotel = (req, res) => {
 const deleteHotel = (req, res) => {
     hotelModel.deleteHotel(req.params.id, (err, result) => {
         if (err) {
-            res.send(err);
-        } else {
-            res.json(result);
+            return res.send(err.sqlMessage);
         }
+        return res.json(result);
     })
 }
 

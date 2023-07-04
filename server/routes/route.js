@@ -1,6 +1,7 @@
 const userController = require('../controllers/user');
 const hotelController = require('../controllers/hotel');
 const serviceController = require('../controllers/service');
+const authController = require('../controllers/auth');
 const express = require("express");
 const router = express.Router();
 
@@ -24,5 +25,8 @@ router.get('/service/:id', serviceController.getServiceById);
 router.post('/service', serviceController.insertService);
 router.put('/service/:id', serviceController.updateService);
 router.delete('/service/:id', serviceController.deleteService);
+
+//routes for auth
+router.post('/auth', authController.checkAuth);
 
 module.exports = router;

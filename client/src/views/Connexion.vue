@@ -30,18 +30,6 @@
                                 >
                                   Connexion
                                 </v-btn>
-                                <h5 class="text-center text-grey mt-4 mb-3">Ou connectez vous avec</h5>
-                                <div class="d-flex justify-space-between align-center mx-10 mb-10">
-                                  <v-btn depressed outlined >
-                                    <v-icon color="red">mdi-google</v-icon>
-                                  </v-btn>
-                                  <v-btn depressed outlined >
-                                    <v-icon color="blue">mdi-facebook</v-icon>
-                                  </v-btn>
-                                  <v-btn depressed outlined>
-                                    <v-icon >mdi-github</v-icon>
-                                  </v-btn>
-                                </div>
                               </v-col>
                             </v-row>
                           </v-col>
@@ -92,9 +80,11 @@
                         </div>
                       </div>
                     </v-col>
+  <!-- windows for inscription -->
                     <v-col cols="12" sm="6">
                       <v-card-text class="mt-8">
                         <h2 class="text-center mb-3">Inscription</h2>
+                        <h5 v-if="existEmail" class="text-red text-center">Email deja enregistrer avec un utilisateur</h5>
                         <h4 class="text-center text-grey">S'inscrire en tant que: <span @click="clientInscri" class="text-grey yeah">Client</span> / <span @click="hotelInscri" class="text-grey yeah">Hotel</span></h4>
   <!-- //inscription en tant que client -->
                         <v-row v-if="clientIn" align="center" justify="center">
@@ -162,6 +152,7 @@
   </template>
   
   <script>
+  import {onMounted} from 'vue'
   import Header from '../components/Header.vue';
   import axios from 'axios'
   
@@ -225,7 +216,8 @@
       	items : [{
             title:"Accueil",
             route:"/"
-        }]
+        }],
+        existEmail: false
     }),
     methods:{
       clientInscri(){
@@ -245,16 +237,25 @@
             contact_user: this.contact_user_inscri,
             mdp_user: this.mdp2_user_inscri
           }).then((response)=>{
-            console.log(response)
+            if(response.data.includes("Duplicate")){
+              this.existEmail = !this.existEmail
+              if(this.existEmail){
+                setTimeout(() => {
+                  this.existEmail = !this.existEmail
+                }, 3000)
+              } 
+            }else{
+              this.$router.push({ name: 'Connexion' })
+            }
           }).catch((err)=>{
             console.log(err)
           })
+          this.mdp2_user_inscri = ""
+          this.contact_user_inscri = ""
+          this.email_user_inscri = ""
+          this.nom_user_inscri = ""
+          this.mdp_user_inscri = ""
         }
-        this.mdp2_user_inscri = ""
-        this.contact_user_inscri = ""
-        this.email_user_inscri = ""
-        this.nom_user_inscri = ""
-        this.mdp_user_inscri = ""
       },
       async submitHotelInscri(){
         const isValid = await this.$refs.form3.validate();
@@ -267,27 +268,28 @@
             contact_hotel: this.contact_hotel_inscri,
             mdp_hotel: this.mdp2_hotel_inscri
           }).then((response)=>{
-            console.log(response)
+            if(response.data.includes("Duplicate")){
+              this.existEmail = !this.existEmail
+              if(this.existEmail){
+                setTimeout(() => {
+                  this.existEmail = !this.existEmail
+                }, 3000)
+              } 
+            }else{
+              this.$router.push({ name: 'Connexion' })
+            }
           }).catch((err)=>{
             console.log(err)
           })
+          this.adresse=""
+          this.nif=""
+          this.mdp2_hotel_inscri = ""
+          this.contact_hotel_inscri = ""
+          this.email_hotel_inscri = ""
+          this.nom_hotel_inscri = ""
+          this.mdp_hotel_inscri = ""
         }
-        this.adresse=""
-        this.nif=""
-        this.mdp2_hotel_inscri = ""
-        this.contact_hotel_inscri = ""
-        this.email_hotel_inscri = ""
-        this.nom_hotel_inscri = ""
-        this.mdp_hotel_inscri = ""
       }
-    }
+    },
   }
   </script>
-  <style scooped>
-  .yeah{
-    cursor: pointer;
-  }
-  .yeah#hover{
-    color: red;
-  }
-  </style>

@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+require('dotenv').config()
 const app = express();
 
 app.use(morgan('combined'));
@@ -11,6 +12,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(router);
 
-app.listen(process.env.PORT || 8081, () =>{
-    console.log("Server is running on port 8081");
+app.listen(process.env.SERVE_PORT, () =>{
+    console.log(`Server is running on port ${process.env.SERVE_PORT}`);
 });

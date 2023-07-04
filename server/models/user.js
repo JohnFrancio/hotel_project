@@ -16,10 +16,10 @@ const getUser = (result) => {
 const getUserById = (id, result) => {
     db.query('SELECT * FROM user WHERE id_user = ?', [id], (err, results) => {
             if (err) {
-                console.log(err);
-            } else {
-                console.log(results);
-                result(null, results[0]);
+                return result(err);
+            }
+            else {
+                return result(null, results);
             }
         });
 };
@@ -30,11 +30,10 @@ const insertUser = async (data, result) => {
     data.mdp_user = await bcrypt.hash(data.mdp_user, salt);
     db.query('INSERT INTO user SET?', [data], (err, results) => {
             if (err) {
-                console.log(err);
-                console.log(err.sqlMessage)
-            } else {
-                console.log(results);
-                result(null, results);
+                return result(err);
+            } 
+            else {
+                return result(null, results);
             }
         });
 };
@@ -43,10 +42,10 @@ const insertUser = async (data, result) => {
 const updatedUser = (data, id, result) => {
     db.query('UPDATE user SET nom_complet = ?, contact_user = ? WHERE id_user =?', [data.nom_complet, data.tel_user, id], (err, results) => {
             if (err) {
-                console.log(err);
-            } else {
-                console.log(results);
-                result(null, results);
+                return result(err);
+            }
+            else {
+                return result(null, results);
             }
         });
 };
@@ -55,10 +54,10 @@ const updatedUser = (data, id, result) => {
 const deleteUser = (id, result) => {
     db.query('DELETE FROM user WHERE id_user = ?', [id], (err, results) => {
             if (err) {
-                console.log(err);
-            } else {
-                console.log(results);
-                result(null, results);
+                return result(err);
+            }
+            else {
+                return result(null, results);
             }
         });
 };

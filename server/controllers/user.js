@@ -5,10 +5,9 @@ const User = require('../models/user');
 const getAllUsers = (req, res) => {
     User.getUser((err, results) => {
         if (err) {
-            res.send(err);
-        }else {
-            res.json(results);
+            return res.send(err.sqlMessage);
         }
+        return res.json(results);
     });
 };
 
@@ -16,10 +15,9 @@ const getAllUsers = (req, res) => {
 const getUserById = (req, res) => {
     User.getUserById(req.params.id, (err, results) => {
         if (err) {
-            res.send(err);
-        }else {
-            res.json(results);
+            return res.send(err.sqlMessage);
         }
+        return res.json(results);
     });
 };
 
@@ -27,21 +25,24 @@ const getUserById = (req, res) => {
 const createUser = (req, res) => {
     User.insertUser(req.body, (err, results) => {
         if (err) {
-            res.json(err);
-        }else {
-            res.json(results);
+            return res.send(err.sqlMessage);
         }
+        return res.json(results);
     });
 };
 
 // update user
 const updateUser = (req, res) => {
+    const data = {
+        nom_user: req.body.nom_user,
+        contact_user: req.body.contact_user,
+        mdp_user: req.body.mdp_user
+    }
     User.updatedUser(req.body, req.params.id, (err, results) => {
         if (err) {
-            res.json(err);
-        }else {
-            res.json(results);
+            return res.send(err.sqlMessage);
         }
+        return res.json(results);
     });
 };
 
@@ -49,10 +50,9 @@ const updateUser = (req, res) => {
 const deleteUser = (req, res) => {
     User.deleteUser(req.params.id, (err, results) => {
         if (err) {
-            res.send(err);
-        }else {
-            res.json(results);
+            return res.send(err.sqlMessage);
         }
+        return res.json(results);
     });
 };
 

@@ -3,26 +3,24 @@ const bcrypt = require('bcrypt')
 
 //get hotel from database
 const getAllHotels = (result) => {
-    db.query('SELECT * FROM acc_hotel', (err, res) => {
+    db.query('SELECT * FROM acc_hotel', (err, results) => {
             if (err) {
-                console.log(err);
+                return result(err);
             }
             else {
-                console.log(res);
-                result(null, res);
+                return result(null, results);
             }
         });
 };
 
 //get hotel from database by id
 const getHotelById = (id, result) => {
-    db.query('SELECT * FROM acc_hotel WHERE id_hotel =?', [id], (err, res) => {
+    db.query('SELECT * FROM acc_hotel WHERE id_hotel =?', [id], (err, results) => {
             if (err) {
-                console.log(err);
+                return result(err);
             }
             else {
-                console.log(res);
-                result(null, res);
+                return result(null, results);
             }
         });
 };
@@ -31,40 +29,36 @@ const getHotelById = (id, result) => {
 const insertHotel = async (data, result) => {
     const salt = await bcrypt.genSalt();
     data.mdp_hotel = await bcrypt.hash(data.mdp_hotel, salt);
-    db.query('INSERT INTO acc_hotel SET?', [data], (err, res) => {
+    db.query('INSERT INTO acc_hotel SET?', [data], (err, results) => {
             if (err) {
-                console.log(err);
-                console.log(err.sqlMessage);
+                return result(err);
             }
             else {
-                console.log(res);
-                result(null, res);
+                return result(null, results);
             }
         });
 };
 
 //update hotel in database
 const updateHotel = async (data, id, result) => {
-    db.query('UPDATE acc_hotel SET? WHERE id_hotel =?', [data, id], (err, res) => {
+    db.query('UPDATE acc_hotel SET? WHERE id_hotel =?', [data, id], (err, results) => {
             if (err) {
-                console.log(err);
+                return result(err);
             }
             else {
-                console.log(res);
-                result(null, res);
+                return result(null, results);
             }
         });
 };
 
 //delete hotel from database
 const deleteHotel = async (id, result) => {
-    db.query('DELETE FROM acc_hotel WHERE id_hotel =?', [id], (err, res) => {
+    db.query('DELETE FROM acc_hotel WHERE id_hotel =?', [id], (err, results) => {
             if (err) {
-                console.log(err);
+                return result(err);
             }
             else {
-                console.log(res);
-                result(null, res);
+                return result(null, results);
             }
         });
 };

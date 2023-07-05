@@ -23,7 +23,13 @@ const getUserById = (req, res) => {
 
 // create user
 const createUser = (req, res) => {
-    User.insertUser(req.body, (err, results) => {
+    const data = {
+        nom_user: req.body.nom_user,
+        email_user: req.body.email_user,
+        contact_user:req.body.contact_user,
+        mdp_user:req.body.mdp_user,
+    }
+    User.insertUser(data, (err, results) => {
         if (err) {
             return res.send(err.sqlMessage);
         }

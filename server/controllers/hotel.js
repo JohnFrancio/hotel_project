@@ -22,7 +22,15 @@ const getHotelById = (req, res) => {
 
 //create a hotel
 const createHotel = (req, res) => {
-    hotelModel.insertHotel(req.body, (err, result) => {
+    const data = {
+        nom_hotel: req.body.nom_hotel,
+        adresse_hotel: req.body.adresse_hotel,
+        nif_hotel:req.body.nif_hotel,
+        email_hotel:req.body.email_hotel,
+        contact_hotel: req.body.contact_hotel,
+        mdp_hotel: req.body.mdp_hotel
+    }
+    hotelModel.insertHotel(data, (err, result) => {
         if (err) {
             return res.send(err.sqlMessage);
         }

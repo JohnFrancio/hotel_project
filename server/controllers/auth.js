@@ -4,53 +4,46 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const checkAuth = (req, res) => {
-	const pass = req.body.password
-	const email = req.body.email
-	authModel.getUserEmail(email, (err, results) => {
-		if(err){
-			return res.send(err)
-		}if(!results || results.length == 0){
-			authModel.getHotelEmail(email, (err, results) => {
-				if(err){
-					return res.send(err)
-				}if(!resu || resu.length == 0){
-					return res.json({message:"Email ou Mot de passe invalide."})
+	const { email, password } = req.body
+	if(!email || !password) return (res.send("Veuillez completer les champs."))
+// auth for the client
+	authModel.getUserEmail(email, async (err, results) => {
+		if(err) return res.send(err)
+		if(!results[0] || results[0].length == 0){
+// auth for the hotel
+			authModel.getHotelEmail(email, async (err, data) => {
+				if(err) return res.send(err)
+				if(!data[0] || data[0].length == 0){
+					return res.send("L'email ou le mot de passe invalide.")
 				}else{
-					return res.json(resu)
-					const result = bcrypt.compare(pass, resu.mdp_hotel)
-					if(result || result.length != 0){
-						resu.mdp_hotel = undefined
-						const token = jwt.sign({ result: resu }, process.env.SECRET_KEY, {
+					const validPass = await bcrypt.compare(password, data[0].mdp_hotel)
+					if(validPass){
+						const token = jwt.sign({ result: data }, process.env.SECRET_KEY, {
 							expiresIn: "1h"
 						})
 						return res.json({
-							message: "Hotel connecte.",
+							status: 1,
 							token: token
 						})
 					}else{
-						return res.json({message:"Email ou Mot de passe invalide."})
+						return res.send("Email ou mot de passe invalide.")
 					}
 				}
 			})
 		}else{
-			return res.json(results)
-			const result = bcrypt.compare(pass, results.mdp_user)
-			if(!result || result.length != 0){
-				results.mdp_user = undefined
+			const validPass = await bcrypt.compare(password, results[0].mdp_user)
+			if(validPass){
 				const token = jwt.sign({ result: results }, process.env.SECRET_KEY, {
 					expiresIn: "1h"
 				})
 				return res.json({
-					message: "Client connecte.",
+					status: 1,
 					token: token
 				})
 			}else{
-				return res.json({message:"Email ou Mot de passe invalide."})
+				return res.json("Email ou mot de passe invalide.")
 			}
 		}
 	})
 }
-
-module.exports = {
-	checkAuth
-}
+module.exports = {checkAuth}

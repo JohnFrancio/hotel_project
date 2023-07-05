@@ -17,21 +17,25 @@
   <!-- //connexion -->
                         <v-row align="center" justify="center">
                           <v-col cols="12" sm="8">   
-                            <v-text-field label="Email" outlined dense color="blue" autocomplete="false" class="mt-8"></v-text-field>   
-                            <v-text-field label="Mot de passe" type="password" outlined dense color="blue" autocomplete="false"></v-text-field>
-                            <v-row>
-                              <v-col cols="12">
-                                <span class="caption text-blue">Mot de passe oublie</span>
-                                <v-btn
-                                  block
-                                  title
-                                  class="text-white mt-3"
-                                  style="background-color:#0862a0;"
-                                >
-                                  Connexion
-                                </v-btn>
-                              </v-col>
-                            </v-row>
+                            <v-form @submit.prevent="submitLogin" ref="form1">
+                              <v-text-field v-model="email" :rules="emailRules" label="Email" outlined dense color="blue" autocomplete="false" class="mt-8"></v-text-field>   
+                              <v-text-field v-model="password" label="Mot de passe" type="password" outlined dense color="blue" autocomplete="false"></v-text-field>
+                              <v-row>
+                                <v-col cols="12">
+                                  <h5 v-if="loginErr" class="text-red text-center">Email ou Mot de passe invalide.</h5>
+                                  <span class="caption text-blue">Mot de passe oublie</span>
+                                  <v-btn
+                                    @click="submitLogin"
+                                    block
+                                    title
+                                    class="text-white mt-3"
+                                    style="background-color:#0862a0;"
+                                  >
+                                    Connexion
+                                  </v-btn>
+                                </v-col>
+                              </v-row>
+                            </v-form>
                           </v-col>
                         </v-row>
                       </v-card-text>
@@ -85,7 +89,7 @@
                       <v-card-text class="mt-8">
                         <h2 class="text-center mb-3">Inscription</h2>
                         <h5 v-if="existEmail" class="text-red text-center">Email deja enregistrer avec un utilisateur</h5>
-                        <h4 class="text-center text-grey">S'inscrire en tant que: <span @click="clientInscri" class="text-grey yeah">Client</span> / <span @click="hotelInscri" class="text-grey yeah">Hotel</span></h4>
+                        <h3 class="text-center text-grey">S'inscrire en tant que: <span @click="clientInscri" class="text-grey yeah">Client</span> / <span @click="hotelInscri" class="text-grey yeah">Hotel</span></h3>
   <!-- //inscription en tant que client -->
                         <v-row v-if="clientIn" align="center" justify="center">
                           <v-col cols="12" sm="8"> 
@@ -115,13 +119,13 @@
                         <v-row v-if="hotelIn" align="center" justify="center">
                           <v-col cols="12" sm="8"> 
                             <v-form @submit.prevent="submitHotelInscri" ref="form3">  
-                              <v-text-field :rules="nameHotel" v-model="nom_hotel_incri" label="Nom de l'hotel" color="blue" autocomplete="false" class="mt-8"></v-text-field>   
+                              <v-text-field v-model="nom_hotel" label="Nom de l'hotel" color="blue" autocomplete="false" class="mt-8"></v-text-field>   
                               <v-text-field v-model="adresse" label="Adresse de l'hotel" color="blue" autocomplete="false"></v-text-field>
                               <v-text-field v-model="nif" label="Numero d'identification fiscale (NIF)" color="blue" autocomplete="false"></v-text-field>
                               <v-text-field v-model="email_hotel_inscri" :rules="emailRules" label="Adresse email" color="blue" autocomplete="false"></v-text-field>
                               <v-text-field v-model="contact_hotel_inscri" :rules="contactRules" label="Contact" color="blue" autocomplete="false"></v-text-field>
-                              <v-text-field v-model="mdp_hotel_inscri" label="Mot de passe" color="blue" autocomplete="false"></v-text-field>
-                              <v-text-field v-model="mdp2_hotel_inscri" :rules="[() => mdp_hotel_inscri === mdp2_hotel_inscri || 'Mot de passe invalide.']" label="Confirmation du mot de passe" color="blue" autocomplete="false"></v-text-field>
+                              <v-text-field type="password" v-model="mdp_hotel_inscri" label="Mot de passe" color="blue" autocomplete="false"></v-text-field>
+                              <v-text-field type="password" v-model="mdp2_hotel_inscri" :rules="[() => mdp_hotel_inscri === mdp2_hotel_inscri || 'Mot de passe invalide.']" label="Confirmation du mot de passe" color="blue" autocomplete="false"></v-text-field>
                               <v-row>
                                 <v-col cols="12">
                                   <span class="caption text-blue"></span>
@@ -167,7 +171,7 @@
         contact_user_inscri:"",
         mdp_user_inscri:"",
         mdp2_user_inscri:"",
-        nom_hotel_inscri:"",
+        nom_hotel:"",
         email_hotel_inscri:"",
         contact_hotel_inscri:"",
         mdp_hotel_inscri:"",
@@ -217,7 +221,10 @@
             title:"Accueil",
             route:"/"
         }],
-        existEmail: false
+        existEmail: false,
+        email:"",
+        password:"",
+        loginErr:false
     }),
     methods:{
       clientInscri(){
@@ -237,57 +244,87 @@
             contact_user: this.contact_user_inscri,
             mdp_user: this.mdp2_user_inscri
           }).then((response)=>{
-            if(response.data.includes("Duplicate")){
+            console.log(response)
+            if(response.data){
               this.existEmail = !this.existEmail
               if(this.existEmail){
                 setTimeout(() => {
                   this.existEmail = !this.existEmail
                 }, 3000)
+              this.mdp2_user_inscri = ""
+              this.contact_user_inscri = ""
+              this.email_user_inscri = ""
+              this.nom_user_inscri = ""
+              this.mdp_user_inscri = ""
               } 
             }else{
-              this.$router.push({ name: 'Connexion' })
+              this.$router.push({ name:'Connexion', query:{ redirect:'/connexion'}})
             }
           }).catch((err)=>{
             console.log(err)
           })
-          this.mdp2_user_inscri = ""
-          this.contact_user_inscri = ""
-          this.email_user_inscri = ""
-          this.nom_user_inscri = ""
-          this.mdp_user_inscri = ""
         }
       },
       async submitHotelInscri(){
         const isValid = await this.$refs.form3.validate();
         if(isValid.valid){
           axios.post("http://localhost:8081/hotel",{
-            nom_hotel: this.nom_hotel_inscri,
+            nom_hotel: this.nom_hotel,
             adresse_hotel: this.adresse,
             nif_hotel: this.nif,
             email_hotel: this.email_hotel_inscri,
             contact_hotel: this.contact_hotel_inscri,
             mdp_hotel: this.mdp2_hotel_inscri
           }).then((response)=>{
-            if(response.data.includes("Duplicate")){
+            const type = typeof response.data
+            console.log(response.data)
+            if(type == "string"){
               this.existEmail = !this.existEmail
               if(this.existEmail){
                 setTimeout(() => {
                   this.existEmail = !this.existEmail
                 }, 3000)
               } 
+              this.adresse=""
+              this.nif=""
+              this.mdp2_hotel_inscri = ""
+              this.contact_hotel_inscri = ""
+              this.email_hotel_inscri = ""
+              this.nom_hotel_inscri = ""
+              this.mdp_hotel_inscri = ""
             }else{
-              this.$router.push({ name: 'Connexion' })
+              this.$router.push({ name:'Connexion', query:{ redirect:'/connexion'}})
             }
           }).catch((err)=>{
             console.log(err)
           })
-          this.adresse=""
-          this.nif=""
-          this.mdp2_hotel_inscri = ""
-          this.contact_hotel_inscri = ""
-          this.email_hotel_inscri = ""
-          this.nom_hotel_inscri = ""
-          this.mdp_hotel_inscri = ""
+        }
+      },
+      async submitLogin(){
+        const isValid = await this.$refs.form1.validate();
+        if(isValid.valid){
+          axios.post("http://localhost:8081/auth",{
+            email: this.email,
+            password: this.password,
+          }).then((response)=>{
+            const type = typeof response.data
+            console.log(response.data)
+            if(type == "string"){
+              this.loginErr = !this.loginErr
+              if(this.loginErr){
+                setTimeout(() => {
+                  this.loginErr = !this.loginErr
+                }, 3000)
+              this.email = ""
+              this.password = ""
+              } 
+            }else{
+              console.log(response)
+              this.$router.push({ name:'Index', query:{ redirect:'/'}})
+            }
+          }).catch((err)=>{
+            console.log(err)
+          })
         }
       }
     },

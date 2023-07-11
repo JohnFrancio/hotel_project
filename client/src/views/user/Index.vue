@@ -1,8 +1,8 @@
 <template>
-    <v-app>
-      <Header :items="items"/>
-      <v-main>
-        <v-row>
+  <v-app>
+    <v-main>
+      <HeaderUser/>
+      <v-row class="me-10">
           <v-col v-for="hotel in hotels" cols="12" sm="4">
             <div >
               <v-card
@@ -27,7 +27,7 @@
 
                 <v-card-actions>
                   <v-btn
-                    @click="this.$router.push('/connexion')"
+                    @click="this.$router.push('/user/hotel/detail/'+hotel.id_hotel)"
                     color="orange"
                     variant="text"
                   >
@@ -55,27 +55,26 @@
             </div>
           </v-col>
         </v-row>
-      </v-main>
-    </v-app>
-  </template>
-  
-  <script>
-  import Header from '../components/Header.vue';
+    </v-main>
+  </v-app>
+</template>
+
+<script>
   import axios from 'axios'
-  export default {
-    name: 'Hotel',
-    components:{
-      Header
-    },
-    data: () => ({
-      hotels: null,
-      show:false,
-      items: [{
-                  title:"Accueil",
-                  route:"/"
-              }]
-    }),
-    methods:{
+  import HeaderUser from '@/components/User/Header'
+
+export default {
+  name: 'UserIndex',
+  data(){
+    return{
+      show: false,
+      hotels: null
+    }
+  },
+  components:{
+    HeaderUser
+  },
+  methods:{
       async getHotel(){
         const response = await axios.get("http://localhost:8081/hotel")
         this.hotels = response.data
@@ -84,6 +83,5 @@
     mounted(){
       this.getHotel()
     }
-  }
-  </script>
-  
+}
+</script>

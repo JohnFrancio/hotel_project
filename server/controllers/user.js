@@ -28,6 +28,7 @@ const createUser = (req, res) => {
         email_user: req.body.email_user,
         contact_user:req.body.contact_user,
         mdp_user:req.body.mdp_user,
+        img_user: req.file?.buffer.toString('base64')
     }
     User.insertUser(data, (err, results) => {
         if (err) {

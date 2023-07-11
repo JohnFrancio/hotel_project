@@ -18,12 +18,15 @@ const checkAuth = (req, res) => {
 				}else{
 					const validPass = await bcrypt.compare(password, data[0].mdp_hotel)
 					if(validPass){
+						data[0].mdp_hotel = null;
 						const token = jwt.sign({ result: data }, process.env.SECRET_KEY, {
 							expiresIn: "1h"
 						})
 						return res.json({
 							status: 1,
-							token: token
+							token: token,
+							user: data[0],
+							role: "hotel"
 						})
 					}else{
 						return res.send("Email ou mot de passe invalide.")
@@ -32,13 +35,16 @@ const checkAuth = (req, res) => {
 			})
 		}else{
 			const validPass = await bcrypt.compare(password, results[0].mdp_user)
+			results[0].mdp_user = null;
 			if(validPass){
 				const token = jwt.sign({ result: results }, process.env.SECRET_KEY, {
 					expiresIn: "1h"
 				})
 				return res.json({
 					status: 1,
-					token: token
+					token: token,
+					user: results[0],
+					role: "user"
 				})
 			}else{
 				return res.json("Email ou mot de passe invalide.")

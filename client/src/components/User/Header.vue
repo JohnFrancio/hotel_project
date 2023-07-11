@@ -4,7 +4,7 @@
           <v-img
             @click="this.$router.push('/')"
             class="ml-5"
-            src="../assets/img/h1_2.jpg"
+            src="../../assets/img/h1_2.jpg"
             max-height="60"
             max-width="30"
             ></v-img>
@@ -16,34 +16,36 @@
             <v-btn
               v-bind="props"
             >
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+                <v-img
+                    class="ml-5"
+                    :src="'data:image/png;base64,'+user.img_user"
+                    max-height="100"
+                    max-width="50"
+                ></v-img>
             </v-btn>
           </template>
 
           <v-list>
                 <v-list-item link
-                    v-for="item in items"
-                    :key="item.title"
-                    :title="item.title"
-                    :to="item.route"
+                    title="Profil"
+                    to="profil"
+                ></v-list-item>
+                <v-list-item link
+                    title="Deconnecter"
+                    @click="this.$router.push('/')"
                 ></v-list-item>
             </v-list>
         </v-menu>
     </v-app-bar>
 </template>
+
 <script>
-export default {
-    props: ['items'],
-    data() {
-        return {
-            drawer: false,
+import store from '../../stores/store'
+export default {  
+    computed: {
+        user(){
+            return this.$store.state.user
         }
-    }
+    },
 }
 </script>
-
-<style scooped>
-    .text-h6{
-        color:#0862a0;
-    }
-</style>

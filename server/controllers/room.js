@@ -1,5 +1,14 @@
 const roomModel = require('../models/room');
 
+//get all room
+const getAllRoom = (req, res) => {
+    hotelModel.getAllRoom((err,results)=>{
+        if (err) {
+            return res.send(err.sqlMessage);
+        }
+        return res.json(results);
+    })
+};
 
 //get room by id
 const getRoomById = (req, res) => {
@@ -62,6 +71,7 @@ const deleteRoom = (req, res) => {
 }
 
 module.exports = {
+    getAllRoom,
     getRoomById,
     createRoom,
     updateRoom,

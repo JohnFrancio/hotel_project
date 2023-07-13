@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <HeaderUser/>
-      <v-row class="me-10">
+      <v-row class="ms-5">
           <v-col v-for="hotel in hotels" cols="12" sm="4">
             <div >
               <v-card
@@ -14,7 +14,6 @@
                   height="200px"
                   cover
                 ></v-img>
-                <h2>{{ isLogin }}</h2>
                 <v-card-title>
                   {{hotel.nom_hotel}}
                 </v-card-title>

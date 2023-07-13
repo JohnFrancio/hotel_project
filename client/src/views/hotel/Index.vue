@@ -222,7 +222,22 @@ export default{
 	      	form.append('img_chambre', this.img_chambre)
 	      	form.append('id_hotel', this.id_hotel)
 	      	const response = await axios.post('http://localhost:8081/room', form)
-	      	console.log(response)
+	      	const datas = await axios.get(`http://localhost:8081/room/${this.id_hotel}`)
+					this.chambre = datas.data
+					for(let i in this.chambre){
+						let test = new Date(this.chambre[i].date_chambre).toLocaleDateString(
+								'fr-FR',
+								{
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+									hour12: false,
+									hour: '2-digit',
+									minute: '2-digit'
+								}
+							)
+						this.chambre[i].date_chambre = test
+					}
 	      	if(response.status == 200){
 	      		this.dialog = false
 		      	this.nbr_pers = 0

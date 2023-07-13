@@ -252,8 +252,9 @@
       userImg(event){
         this.img_user = event.target.files[0]
       },
-      HotelImg(event){
+      hotelImg(event){
         this.img_hotel = event.target.files[0]
+        console.log(this.img_hotel)
       },
       clientInscri(){
         this.clientIn = true
@@ -304,7 +305,7 @@
           form.append('nom_hotel', this.nom_hotel)
           form.append('adresse_hotel', this.adresse)
           form.append('nif_hotel', this.nif)
-          form.append('email_hotel', this.mdp2_user_inscri)
+          form.append('email_hotel', this.email_hotel_inscri)
           form.append('contact_hotel', this.contact_hotel_inscri)
           form.append('mdp_hotel', this.mdp2_hotel_inscri)
           form.append('description', this.description)

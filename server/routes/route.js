@@ -29,6 +29,7 @@ router.delete('/hotel/:id', hotelController.deleteHotel);
 router.post('/auth', authController.checkAuth);
 
 //routes for room
+router.get('/room', roomController.getAllRoom)
 router.get('/room/:id', roomController.getRoomById);
 router.post('/room',upload.single('img_chambre'), roomController.createRoom);
 router.put('/room/:id', upload.single('img_chambre'), roomController.updateRoom);

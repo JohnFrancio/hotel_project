@@ -55,7 +55,7 @@
 <script>
 import { defineComponent } from "vue";
 import Header from "../components/Header.vue";
-
+import { mapMutations } from 'vuex'
 // Components
 
 export default defineComponent({
@@ -75,5 +75,11 @@ export default defineComponent({
   components: {
     Header
   },
+  methods: {
+    ...mapMutations(['logout'])
+  },
+  mounted(){
+    this.logout()
+  }
 });
 </script>

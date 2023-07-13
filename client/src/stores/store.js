@@ -1,7 +1,13 @@
 import { createStore } from 'vuex'
+import createPersistedState from "vuex-persistedstate"
+import SecureLS from "secure-ls"
+var ls = new SecureLS({ isCompression: false })
 
 // Create a new store instance.
 export const store = createStore({
+  plugins:[
+    createPersistedState()
+  ],
   state () {
     return {
       token: null,
@@ -16,12 +22,11 @@ export const store = createStore({
     setUser(state, user){
       state.user = user
       state.isLogin = true
-    }
-  },
-  actions:{
-    setToken({commit}, { token, user }){
-      commit('setUser', user)
-      commit('setToken', token)
+    },
+    logout(state){
+      state.user = null
+      state.isLogin = false
+      state.token = null
     }
   }
 })

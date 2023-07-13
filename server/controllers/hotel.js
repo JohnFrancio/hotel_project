@@ -22,6 +22,7 @@ const getHotelById = (req, res) => {
 
 //create a hotel
 const createHotel = (req, res) => {
+    console.log(req.file)
     const data = {
         nom_hotel: req.body.nom_hotel,
         adresse_hotel: req.body.adresse_hotel,
@@ -29,7 +30,8 @@ const createHotel = (req, res) => {
         email_hotel:req.body.email_hotel,
         contact_hotel: req.body.contact_hotel,
         mdp_hotel: req.body.mdp_hotel,
-        img_hotel: req.file?.buffer.toString('base64')
+        description:req.body.description,
+        img_hotel: req.file.buffer.toString('base64')
     }
     hotelModel.insertHotel(data, (err, result) => {
         if (err) {

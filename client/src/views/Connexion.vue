@@ -92,7 +92,7 @@
   <!-- //inscription en tant que client -->
                         <v-row v-if="clientIn" align="center" justify="center">
                           <v-col cols="12" sm="8"> 
-                            <v-form @submit.prevent="submitUserInscri" ref="form2">  
+                            <v-form enctype="multipart/form-data" @submit.prevent="submitUserInscri" ref="form2">  
                               <v-text-field :rules="nameRules" v-model="nom_user_inscri" label="Nom complet" color="blue" autocomplete="false" class="mt-8"></v-text-field>   
                               <v-text-field :rules="emailRules" v-model="email_user_inscri" label="Adresse email" color="blue" autocomplete="false"></v-text-field>
                               <v-row>
@@ -100,7 +100,7 @@
                                   <v-text-field :rules="contactRules" v-model="contact_user_inscri" label="Contact" color="blue" autocomplete="false"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                  <v-file-input :rules="[v => !!v || 'Profil requis.']" accept="image/*" v:model="profil_pic" label="Photo de Profile"></v-file-input>
+                                  <v-file-input accept="image/*" :rules="[v => (v==false) ? 'Profil requis' : true]" @change="userImg" label="Photo de Profile"></v-file-input>
                                 </v-col>
                               </v-row>
                               <v-text-field v-model="mdp_user_inscri" type="password" label="Mot de passe" color="blue" autocomplete="false"></v-text-field>
@@ -134,9 +134,14 @@
                                   <v-text-field :rules="contactRules" outlined v-model="contact_hotel_inscri" label="Contact" color="blue" autocomplete="false"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
-                                  <v-file-input accept="image/*" v:model="hotel_pic" label="Photo de Profile"></v-file-input>
+                                  <v-file-input accept="image/*" :rules="[v => (v==false) ? 'Profil requis' : true]" @change="hotelImg" label="Photo de Profile"></v-file-input>
                                 </v-col>
                               </v-row>
+                              <v-textarea
+                                v-model="description"
+                                label="Description"
+                                append-icon="mdi-comment"
+                              ></v-textarea>
                               <v-text-field type="password" v-model="mdp_hotel_inscri" label="Mot de passe" color="blue" autocomplete="false"></v-text-field>
                               <v-text-field type="password" v-model="mdp2_hotel_inscri" :rules="[() => mdp_hotel_inscri === mdp2_hotel_inscri || 'Mot de passe invalide.']" label="Confirmation du mot de passe" color="blue" autocomplete="false"></v-text-field>
                               <v-row>
@@ -169,6 +174,7 @@
   </template>
   
   <script>
+  import { mapMutations } from 'vuex'
   import Header from '../components/Header.vue';
   import axios from 'axios'
   // import { mapActions } from 'vuex';
@@ -191,8 +197,9 @@
         mdp2_hotel_inscri:"",
         adresse:"",
         nif:"",
-        profil_pic:"",
-        hotel_pic:"",
+        img_user:"",
+        img_hotel:"",
+        description:"",
         nameHotel:[
           value => {
             if (value) return true
@@ -232,7 +239,7 @@
         step: 1,
         clientIn:true,
         hotelIn:false,
-      	items : [{
+        items : [{
             title:"Accueil",
             route:"/"
         }],
@@ -242,6 +249,12 @@
         loginErr:false
     }),
     methods:{
+      userImg(event){
+        this.img_user = event.target.files[0]
+      },
+      HotelImg(event){
+        this.img_hotel = event.target.files[0]
+      },
       clientInscri(){
         this.clientIn = true
         this.hotelIn = (this.hotelIn) ? false : false
@@ -254,13 +267,13 @@
       async submitUserInscri(){
         const isValid = await this.$refs.form2.validate();
         if(isValid.valid){
-          axios.post("http://localhost:8081/user",{
-            nom_user: this.nom_user_inscri,
-            email_user: this.email_user_inscri,
-            contact_user: this.contact_user_inscri,
-            mdp_user: this.mdp2_user_inscri,
-            img_user: this.profil_pic
-          }).then((response)=>{
+          let form = new FormData()
+          form.append('nom_user', this.nom_user_inscri)
+          form.append('email_user', this.email_user_inscri)
+          form.append('contact_user', this.contact_user_inscri)
+          form.append('mdp_user', this.mdp2_user_inscri)
+          form.append('img_user', this.img_user)
+          axios.post("http://localhost:8081/user",form).then((response)=>{
             console.log(response)
             if(response.data){
               this.existEmail = !this.existEmail
@@ -273,10 +286,10 @@
               this.email_user_inscri = ""
               this.nom_user_inscri = ""
               this.mdp_user_inscri = ""
-              this.profil_pic = ""
+              this.img_user = null
               } 
             }else{
-              this.$router.push({ name:'Connexion', query:{ redirect:'/connexion'}})
+              this.step++
             }
           }).catch((err)=>{
             console.log(err)
@@ -287,15 +300,16 @@
       async submitHotelInscri(){
         const isValid = await this.$refs.form3.validate();
         if(isValid.valid){
-          axios.post("http://localhost:8081/hotel",{
-            nom_hotel: this.nom_hotel,
-            adresse_hotel: this.adresse,
-            nif_hotel: this.nif,
-            email_hotel: this.email_hotel_inscri,
-            contact_hotel: this.contact_hotel_inscri,
-            mdp_hotel: this.mdp2_hotel_inscri,
-            img_hotel: this.hotel_pic
-          }).then((response)=>{
+          let form = new FormData()
+          form.append('nom_hotel', this.nom_hotel)
+          form.append('adresse_hotel', this.adresse)
+          form.append('nif_hotel', this.nif)
+          form.append('email_hotel', this.mdp2_user_inscri)
+          form.append('contact_hotel', this.contact_hotel_inscri)
+          form.append('mdp_hotel', this.mdp2_hotel_inscri)
+          form.append('description', this.description)
+          form.append('img_hotel', this.img_hotel)
+          axios.post("http://localhost:8081/hotel", form).then((response)=>{
             const type = typeof response.data
             console.log(response.data)
             if(type == "string"){
@@ -312,15 +326,18 @@
               this.email_hotel_inscri = ""
               this.nom_hotel_inscri = ""
               this.mdp_hotel_inscri = ""
-              this.hotel_pic = ""
+              this.img_hotel = null
+              this.description= ""
             }else{
-              this.$router.push({ name:'Connexion', query:{ redirect:'/connexion'}})
+              this.step++
             }
           }).catch((err)=>{
             console.log(err)
           })
         }
       },
+// mutations for vuex
+      ...mapMutations(["setToken", "setUser"]),
 // submit login connexion signIn
       async submitLogin(){
         const isValid = await this.$refs.form1.validate();
@@ -340,17 +357,19 @@
               this.password = ""
               } 
             }else{
-              const role = response.data.role
               if(response.data.role == "user"){
                 const user = response.data.user
                 const token = response.data.token
-                this.$store.dispatch('setToken', { token, user })
+                this.setToken(token)
+                this.setUser(user)
                 this.$router.push('/user/index')
-              }else{
+              }
+              if(response.data.role == "hotel"){
                 const user = response.data.user
                 const token = response.data.token
-                this.$store.dispatch('setToken', { token, user })
-                this.$router.push('/hotel')
+                this.setToken(token)
+                this.setUser(user)
+                this.$router.push('/hotel/index')
               }
             }
           }).catch((err)=>{
@@ -360,4 +379,5 @@
       }  
     }
   }
+
   </script>

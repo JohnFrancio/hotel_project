@@ -7,14 +7,14 @@
             <div >
               <v-card
                 class="mx-5 mx-sm-2 mt-15"
-                max-width="344"
+                max-width="400"
               >
                 <v-img
                   :src="'data:image/png;base64,'+hotel.img_hotel"
                   height="200px"
                   cover
                 ></v-img>
-
+                <h2>{{ isLogin }}</h2>
                 <v-card-title>
                   {{hotel.nom_hotel}}
                 </v-card-title>
@@ -60,11 +60,18 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import axios from 'axios'
   import HeaderUser from '@/components/User/Header'
 
 export default {
   name: 'UserIndex',
+  computed:{
+    ...mapState([
+      'user',
+      'isLogin'
+    ])
+  },
   data(){
     return{
       show: false,
@@ -75,13 +82,17 @@ export default {
     HeaderUser
   },
   methods:{
-      async getHotel(){
-        const response = await axios.get("http://localhost:8081/hotel")
-        this.hotels = response.data
-      },
+    async getHotel(){
+      const response = await axios.get("http://localhost:8081/hotel")
+      this.hotels = response.data
     },
-    mounted(){
-      this.getHotel()
+  },
+  mounted(){
+    if(!this.isLogin){
+      this.$route.push('/connexion')
     }
+    this.getHotel()
+  }
+
 }
 </script>

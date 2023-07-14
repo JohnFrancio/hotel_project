@@ -2,7 +2,7 @@ const db = require('../connexion/db')
 
 //get room from database
 const getAllRoom = (result) => {
-    db.query('SELECT * FROM chambre', (err, results) => {
+    db.query('SELECT * FROM chambre INNER JOIN acc_hotel ON chambre.id_hotel = acc_hotel.id_hotel', (err, results) => {
             if (err) {
                 return result(err);
             }
@@ -61,7 +61,7 @@ const updateRoom = async (data, id, result) => {
 
 //delete room from database
 const deleteRoom = async (id, result) => {
-    db.query('DELETE FROM chambre WHERE id_hotel =?', [id], (err, results) => {
+    db.query('DELETE FROM chambre WHERE id_chambre =?', [id], (err, results) => {
             if (err) {
                 return result(err);
             }

@@ -2,7 +2,7 @@ const roomModel = require('../models/room');
 
 //get all room
 const getAllRoom = (req, res) => {
-    hotelModel.getAllRoom((err,results)=>{
+    roomModel.getAllRoom((err,results)=>{
         if (err) {
             return res.send(err.sqlMessage);
         }

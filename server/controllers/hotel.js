@@ -47,7 +47,9 @@ const updateHotel = (req, res) => {
         nom_hotel: req.body.nom_hotel,
         adresse_hotel: req.body.adresse_hotel,
         contact_hotel: req.body.contact_hotel,
-        mdp_hotel: req.body.mdp_hotel
+        nif_hotel: req.body.nif_hotel,
+        description: req.body.description,
+        img_hotel: req.file.buffer.toString('base64')
     }
     hotelModel.updateHotel(data, req.params.id, (err, result) => {
         if (err) {

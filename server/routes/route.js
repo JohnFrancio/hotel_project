@@ -21,7 +21,7 @@ router.delete('/user/:id', userController.deleteUser);
 router.get('/hotel', hotelController.getAllHotels);
 router.get('/hotel/:id', hotelController.getHotelById);
 router.post('/hotel', upload.single("img_hotel"), hotelController.createHotel);
-router.put('/hotel/:id', hotelController.updateHotel);
+router.put('/hotel/:id', upload.single("img_hotel"), hotelController.updateHotel);
 router.delete('/hotel/:id', hotelController.deleteHotel);
 
 

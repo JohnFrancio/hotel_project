@@ -14,7 +14,7 @@ const upload = multer({ storage })
 router.get('/user', userController.getAllUsers);
 router.get('/user/:id', userController.getUserById);
 router.post('/user',upload.single('img_user'), userController.createUser);
-router.put('/user/:id', userController.updateUser);
+router.put('/user/:id',upload.single('img_user'), userController.updateUser);
 router.delete('/user/:id', userController.deleteUser);
 
 // routes for hotels

@@ -290,6 +290,12 @@
               this.img_user = null
               } 
             }else{
+              this.mdp2_user_inscri = ""
+              this.contact_user_inscri = ""
+              this.email_user_inscri = ""
+              this.nom_user_inscri = ""
+              this.mdp_user_inscri = ""
+              this.img_user = null
               this.step++
             }
           }).catch((err)=>{
@@ -330,6 +336,15 @@
               this.img_hotel = null
               this.description= ""
             }else{
+              this.adresse=""
+              this.nif=""
+              this.mdp2_hotel_inscri = ""
+              this.contact_hotel_inscri = ""
+              this.email_hotel_inscri = ""
+              this.nom_hotel_inscri = ""
+              this.mdp_hotel_inscri = ""
+              this.img_hotel = null
+              this.description= ""
               this.step++
             }
           }).catch((err)=>{
@@ -338,7 +353,10 @@
         }
       },
 // mutations for vuex
-      ...mapMutations(["setToken", "setUser"]),
+      ...mapMutations({
+        setToken:'setToken',
+        setUser: 'setUser'
+      }),
 // submit login connexion signIn
       async submitLogin(){
         const isValid = await this.$refs.form1.validate();
@@ -359,6 +377,18 @@
               } 
             }else{
               if(response.data.role == "user"){
+                let date = new Date(response.data.user.date_user).toLocaleDateString(
+                    'fr-FR',
+                    {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }
+                  )
+                response.data.user.date_user = date
                 const user = response.data.user
                 const token = response.data.token
                 this.setToken(token)
@@ -366,6 +396,18 @@
                 this.$router.push('/user/index')
               }
               if(response.data.role == "hotel"){
+                let date = new Date(response.data.user.date_hotel).toLocaleDateString(
+                    'fr-FR',
+                    {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }
+                  )
+                response.data.user.date_hotel = date
                 const user = response.data.user
                 const token = response.data.token
                 this.setToken(token)

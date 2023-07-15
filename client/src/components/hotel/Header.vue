@@ -2,7 +2,7 @@
     <v-app-bar app class="px-5 py-3"
     >
           <v-img
-            @click="this.$router.push('/')"
+            @click="this.$router.push('/hotel/index')"
             class="ml-5"
             src="../../assets/img/h1_2.jpg"
             max-height="60"

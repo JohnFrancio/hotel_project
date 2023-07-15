@@ -2,19 +2,19 @@
     <v-app>
       <Header :items="items"/>
       <v-main>
-        <v-row>
-          <v-col v-for="hotel in hotels" cols="12" sm="4">
+        <h2 class="ms-10 mt-10">Nos hotels:</h2>
+      <v-row align="center" justify="center">
+          <v-col v-for="hotel in hotels" cols="12" sm="3">
             <div >
               <v-card
-                class="mx-5 mx-sm-2 mt-15"
-                max-width="344"
+                class="mx-5 mx-sm-2 mt-5"
+                max-width="400"
               >
                 <v-img
                   :src="'data:image/png;base64,'+hotel.img_hotel"
                   height="200px"
                   cover
                 ></v-img>
-
                 <v-card-title>
                   {{hotel.nom_hotel}}
                 </v-card-title>
@@ -27,7 +27,7 @@
 
                 <v-card-actions>
                   <v-btn
-                    @click="this.$router.push('/connexion')"
+                    @click="this.$router.push('/user/hotel/detail/'+hotel.id_hotel)"
                     color="orange"
                     variant="text"
                   >
@@ -60,30 +60,41 @@
   </template>
   
   <script>
-  import Header from '../components/Header.vue';
-  import axios from 'axios'
-  export default {
-    name: 'Hotel',
-    components:{
-      Header
-    },
-    data: () => ({
-      hotels: null,
-      show:false,
-      items: [{
-                  title:"Accueil",
-                  route:"/"
-              }]
-    }),
-    methods:{
-      async getHotel(){
-        const response = await axios.get("http://localhost:8081/hotel")
-        this.hotels = response.data
-      },
-    },
-    mounted(){
-      this.getHotel()
-    }
-  }
+import { mapState, mapGetters, mapActions } from 'vuex'
+import Header from '../components/Header.vue';
+import axios from 'axios'
+export default {
+  name: 'Hotel',
+  computed:{
+    ...mapState([
+      'user',
+      'isLogin'
+    ]),
+    ...mapGetters({
+      hotels: 'hotel/allHotel',
+      rooms: 'room/getAllRooms'
+    })
+  },
+  methods:{
+    ...mapActions({
+      getHotels:'hotel/getHotels',
+      getAllRooms: 'room/getAllRooms'
+    })
+  },
+  created(){
+    this.getHotels()
+    this.getAllRooms()
+  },
+  components:{
+    Header
+  },
+  data: () => ({
+    show:false,
+    items: [{
+      title:"Accueil",
+      route:"/"
+    }]
+  }),
+}
   </script>
   

@@ -43,10 +43,10 @@ const createUser = (req, res) => {
 const updateUser = (req, res) => {
     const data = {
         nom_user: req.body.nom_user,
-        contact_user: req.body.contact_user,
-        mdp_user: req.body.mdp_user
+        contact_user:req.body.contact_user,
+        img_user: req.file.buffer.toString('base64')
     }
-    User.updatedUser(req.body, req.params.id, (err, results) => {
+    User.updatedUser(data, req.params.id, (err, results) => {
         if (err) {
             return res.send(err.sqlMessage);
         }

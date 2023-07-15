@@ -3,7 +3,9 @@ import Index from '../views/Index.vue'
 import Hotel from '../views/Hotel.vue'
 import Connexion from '../views/Connexion.vue'
 import UserIndex from '../views/user/Index.vue'
+import UserProfil from '../views/user/Profil.vue'
 import HotelIndex from '../views/hotel/Index.vue'
+import HotelProfil from '../views/hotel/Profil.vue'
 import HotelDetails from '../views/user/HotelDetail.vue'
 
 const routes = [
@@ -36,6 +38,16 @@ const routes = [
     path: '/hotel/index',
     name: 'HotelIndex',
     component: HotelIndex
+  },
+  {
+    path: '/hotel/profil',
+    name: 'HotelProfil',
+    component: HotelProfil
+  },
+  {
+    path: '/user/profil',
+    name: 'UserProfil',
+    component: UserProfil
   },
 ]
 

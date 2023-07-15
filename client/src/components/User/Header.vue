@@ -2,7 +2,7 @@
     <v-app-bar app class="px-5 py-3"
     >
           <v-img
-            @click="this.$router.push('/')"
+            @click="this.$router.push('/user/index')"
             class="ml-5"
             src="../../assets/img/h1_2.jpg"
             max-height="60"
@@ -15,20 +15,15 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
+              icon="mdi-account"
             >
-                <v-img
-                    class="ml-5"
-                    :src="'data:image/png;base64,'+user.img_user"
-                    max-height="100"
-                    max-width="50"
-                ></v-img>
             </v-btn>
           </template>
 
           <v-list>
                 <v-list-item link
                     title="Profil"
-                    to="profil"
+                    @click="this.$router.push('/user/profil')"
                 ></v-list-item>
                 <v-list-item link
                     title="Deconnecter"

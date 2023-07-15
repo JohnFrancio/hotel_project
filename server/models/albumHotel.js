@@ -14,9 +14,9 @@ const getAllPic = (result) => {
 
 //get album from database by id
 const getPicById = (id, result) => {
-    db.query('SELECT * FROM image WHERE id_img =?', [id], (err, results) => {
+    db.query('SELECT * FROM image WHERE id_hotel =?', [id], (err, results) => {
             if (err) {
-                return result(err);
+                throw err;
             }
             else {
                 return result(null, results);

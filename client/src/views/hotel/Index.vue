@@ -11,7 +11,7 @@
 		          ></v-icon>
 		        	Chambre
 		      	</v-btn>
-		      	<v-btn @click="dialog = true">
+		      	<v-btn @click="dialog2 = true">
 			      	<v-icon
 		            icon="mdi-image-plus"
 		            width="100"
@@ -20,8 +20,9 @@
 		      	</v-btn>
 	      	</div>
 	      </div>
-	      <v-row class="ms-sm-3">
-          <v-col v-for="(cham ,index) in chambre"  cols="12" sm="3">
+      	<h2 class="ms-10 text-grey">Vos chambres:</h2>
+	      <v-row align="center" justify="center" class="ms-sm-3 mt-3">
+          <v-col v-for="(cham ,index) in room"  cols="12" sm="3">
 	      		<v-card
 					    class="mx-auto"
 					    max-width="344"
@@ -73,6 +74,7 @@
 
 					    <v-card-actions>
 					      <v-btn 
+					      	class="me-7"
 					      	@click="edit(index, cham.id_chambre)"
 					        color="orange-lighten-2"
 					        variant="text"
@@ -83,10 +85,76 @@
 			          ></v-icon>
 					        Modifier
 					      </v-btn>
+					      <v-btn 
+					      	@click="deleteRoom(cham.id_chambre)"
+					        color="red-lighten-2"
+					        variant="text"
+					      >
+					      <v-icon
+			            icon="mdi-delete"
+			            width="100"
+			          ></v-icon>
+					        Supprimer
+					      </v-btn>
 					    </v-card-actions>
 					  </v-card>
 	        </v-col>
 	      </v-row>
+	      <h2 class="ms-10 text-grey">Vos images:</h2>
+	      <v-row align="center" justify="center" class="ms-sm-3 mt-3 mb-5">
+          <v-col v-for="(pic ,index) in pics"  cols="12" sm="3">
+	      		<v-card
+					    class="mx-auto"
+					    max-width="344"
+					  >
+					    <v-img
+					      :src="`data:image/png;base64,${pic.img}`"
+					      height="200px"
+					      cover
+					    ></v-img>
+					    <v-card-actions>
+					      <v-btn 
+					      	@click="deletePic(pic.id_img)"
+					        color="red-lighten-2"
+					        variant="text"
+					      >
+					      <v-icon
+			            icon="mdi-delete"
+			            width="100"
+			          ></v-icon>
+					        Supprimer
+					      </v-btn>
+					    </v-card-actions>
+					  </v-card>
+					</v-col>
+				</v-row>
+	      <v-dialog v-model="dialog2" width="50%">
+	      	<v-card>
+	      		<v-card-text>
+              <v-form @submit.prevent="addImg" class="px-5" ref="form2"> 
+                  <v-file-input accept="image/*" multiple :rules="[v => (v==false) ? 'Image illustrant l\'hotel requis.' : true]" @change="imgHotel" label="Image illustrant l'hotel"></v-file-input>
+              	<v-card-actions>
+              		<div class="text-center">
+              			<v-btn
+                        @click="addImg"
+                        class="text-white mt-3 mx-5"
+                        style="background-color:#0862a0;"
+                        >
+                        Envoyer
+                      </v-btn>
+                     <v-btn
+                      @click="closeAddImg"
+                      class="text-white mt-3"
+                      style="background-color:orange;"
+                      >
+                      	Close
+                      </v-btn>
+              		</div>
+              	</v-card-actions>
+              </v-form>
+	      		</v-card-text>
+	      	</v-card>
+	      </v-dialog>
 	      <v-dialog v-model="dialog" width="50%">
 	      	<v-card>
 	      		<v-card-text>
@@ -136,7 +204,7 @@
 	                        </v-col>
 	                     </v-row>
                     	<v-card-actions>
-                    		<div align="center" justify="center" class="text-center">
+                    		<div class="text-center">
                     			<v-btn
                     					v-if="add == true"
 	                            @click="addRoom"
@@ -173,17 +241,21 @@
 <script>
 import axios from 'axios'
 import HeaderHotel from '@/components/hotel/Header'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default{
 	name: 'HotelIndex',
 	computed:{
-		...mapState(['user'])
+		...mapState(['user']),
+		...mapGetters({
+			profil: 'getProfil',
+			room:'room/allRoom',
+			pics:'pic/allPics'
+		})
 	},
 	data (){
 		return{
+			img_hotel: null,
 			add:true,
-			chambre: null,
-			id_hotel: this.$store.state.user.id_hotel,
 			id_chambre: null,
 			nbr_pers: 0,
 			nbr_lit1: 0,
@@ -191,6 +263,7 @@ export default{
 			nbr_douche: 0,
 			nbr_tele: 0,
 			dialog: false,
+			dialog2: false,
 			prix: null,
 			priceRules: [
 		      value => {
@@ -206,8 +279,30 @@ export default{
 		HeaderHotel,
 	},
 	methods:{
+			imgHotel(event){
+				this.img_hotel = event.target.files
+			},
       roomImg(event){
         this.img_chambre = event.target.files[0]
+      },
+      async addImg(){
+      	const isValid = await this.$refs.form2.validate();
+        if(isValid.valid){
+	      	let form = new FormData()
+	      	for(let i in this.img_hotel){
+	      		form.append('image', this.img_hotel[i])
+	      	}
+	      	form.append('id_hotel', this.profil.id_hotel)
+	      	const credentials = {
+	      		form,
+	      		id: this.profil.id_hotel
+	      	}
+	      	const response = await this.addPics(credentials)
+	      	if(response != undefined){
+	      		this.dialog2 = false
+		      	this.img_hotel = null
+		      }
+	      }
       },
       async addRoom(){
       	const isValid = await this.$refs.form.validate();
@@ -220,25 +315,14 @@ export default{
 	      	form.append('nbr_tele', this.nbr_tele)
 	      	form.append('prix', this.prix)
 	      	form.append('img_chambre', this.img_chambre)
-	      	form.append('id_hotel', this.id_hotel)
-	      	const response = await axios.post('http://localhost:8081/room', form)
-	      	const datas = await axios.get(`http://localhost:8081/room/${this.id_hotel}`)
-					this.chambre = datas.data
-					for(let i in this.chambre){
-						let test = new Date(this.chambre[i].date_chambre).toLocaleDateString(
-								'fr-FR',
-								{
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-									hour12: false,
-									hour: '2-digit',
-									minute: '2-digit'
-								}
-							)
-						this.chambre[i].date_chambre = test
-					}
-	      	if(response.status == 200){
+	      	form.append('id_hotel', this.profil.id_hotel)
+	      	const credentials = {
+	      		form,
+	      		id: this.profil[0].id_hotel
+	      	}
+	      	const response = await this.addRooms(credentials)
+	      	console.log(response)
+	      	if(response != undefined){
 	      		this.dialog = false
 		      	this.nbr_pers = 0
 						this.nbr_lit1 = 0
@@ -247,8 +331,14 @@ export default{
 						this.nbr_tele = 0
 						this.prix = null
 			    	this.img_chambre = null
+	      	}else{
+	      		alert("Taille de la photo trop grande.")
 	      	}
-	    }
+	    	}
+      },
+      closeAddImg(){
+      	this.dialog2 = false
+				this.img_hotel= null
       },
       closeAddRoom(){
       	this.add = true
@@ -265,12 +355,12 @@ export default{
       	this.id_chambre = id
       	this.add = false
       	this.dialog = true
-      	this.nbr_pers = this.chambre[index].nbr_pers
-				this.nbr_lit1 = this.chambre[index].nbr_lit1
-				this.nbr_lit2 = this.chambre[index].nbr_lit2
-				this.nbr_douche = this.chambre[index].nbr_douche
-				this.nbr_tele = this.chambre[index].nbr_tele
-				this.prix = this.chambre[index].prix
+      	this.nbr_pers = this.room[index].nbr_pers
+				this.nbr_lit1 = this.room[index].nbr_lit1
+				this.nbr_lit2 = this.room[index].nbr_lit2
+				this.nbr_douche = this.room[index].nbr_douche
+				this.nbr_tele = this.room[index].nbr_tele
+				this.prix = this.room[index].prix
       },
       async editRoom(){
       	const isValid = await this.$refs.form.validate();
@@ -283,25 +373,14 @@ export default{
 	      	form.append('nbr_tele', this.nbr_tele)
 	      	form.append('prix', this.prix)
 	      	form.append('img_chambre', this.img_chambre)
-	      	form.append('id_hotel', this.id_hotel)
-	      	const response = await axios.put(`http://localhost:8081/room/${this.id_chambre}`, form)
-      		const datas = await axios.get(`http://localhost:8081/room/${this.id_hotel}`)
-					this.chambre = datas.data
-					for(let i in this.chambre){
-						let test = new Date(this.chambre[i].date_chambre).toLocaleDateString(
-								'fr-FR',
-								{
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-									hour12: false,
-									hour: '2-digit',
-									minute: '2-digit'
-								}
-							)
-						this.chambre[i].date_chambre = test
-					}
-	      	if(response.status == 200){
+	      	const credentials = {
+	      		form,
+	      		id: this.id_chambre,
+	      		id_hotel: this.profil[0].id_hotel
+	      	}
+	      	const response = await this.updateRoom(credentials)
+	      	console.log(response)
+	      	if(response != undefined){
 	      		this.dialog = false
 		      	this.nbr_pers = 0
 						this.nbr_lit1 = 0
@@ -310,29 +389,25 @@ export default{
 						this.nbr_tele = 0
 						this.prix = null
 			    	this.img_chambre = null
-			    	this.add = true
+	      	}else{
+	      		alert("Erreur lors de l'insertion.")
 	      	}
 				}
-      }
+      },
+      ...mapActions({
+      	getRooms: 'room/getRooms',
+      	addRooms: 'room/addRooms',
+      	deleteRoom: 'room/deleteRoom',
+      	updateRoom: 'room/updateRoom',
+      	addPics: 'pic/addPics',
+      	getPics: 'pic/getPics',
+      	deletePic: 'pic/deletePic'
+      })
     },
-	async mounted(){
-		const response = await axios.get(`http://localhost:8081/room/${this.id_hotel}`)
-		this.chambre = response.data
-		for(let i in this.chambre){
-			let test = new Date(this.chambre[i].date_chambre).toLocaleDateString(
-					'fr-FR',
-					{
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric',
-						hour12: false,
-						hour: '2-digit',
-						minute: '2-digit'
-					}
-				)
-			this.chambre[i].date_chambre = test
+		created(){
+			this.getRooms(this.profil.id_hotel)
+			this.getPics(this.profil.id_hotel)
 		}
-	}
 }
 	
 </script>

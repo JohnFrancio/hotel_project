@@ -5,7 +5,6 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { store } from './stores/store.js'
 import 'leaflet/dist/leaflet.css';
-
 loadFonts()
 
 createApp(App)

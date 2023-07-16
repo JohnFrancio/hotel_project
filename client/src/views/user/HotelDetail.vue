@@ -19,21 +19,21 @@
             max-width="100%"
           >
             <v-img
-              :src="'data:image/png;base64,'+hotel[0].img_hotel"
-              height="280px"
+              :src="`data:image/png;base64,${hotel[0]?.img_hotel}`"
+              height="251px"
               cover
             ></v-img>
             <v-card-title>
-              {{hotel.nom_hotel}}
+              {{hotel[0]?.nom_hotel}}
             </v-card-title>
 
             <v-card-subtitle>
-              Adresse: {{hotel[0].adresse_hotel}} <br>
-              Contact: {{hotel[0].contact_hotel}} <br>
-              Email: {{hotel[0].email_hotel}} <br>
+              Adresse: {{hotel[0]?.adresse_hotel}} <br>
+              Contact: {{hotel[0]?.contact_hotel}} <br>
+              Email: {{hotel[0]?.email_hotel}} <br>
             </v-card-subtitle>
             <v-card-text>
-              {{hotel[0].description}}
+              {{hotel[0]?.description}}
             </v-card-text>
           </v-card>
         </v-col>
@@ -93,6 +93,11 @@
             </v-card-title>
 
             <v-card-subtitle>
+              <v-btn flat class="px-5">
+                {{ cham.nbr_pers }} 
+                <v-icon>mdi-account</v-icon>
+                Personne
+              </v-btn><br>
               <v-btn flat class="px-5">
                 {{ cham.nbr_lit1 }} 
                 <v-icon>mdi-bed</v-icon>
@@ -155,7 +160,7 @@ export default {
   },
   computed:{
     ...mapGetters({
-      hotel: 'hotel/hotel',
+      // hotel: 'hotel/hotel',
       room:'room/allRoom',
       countPics: 'pic/countPics',
       pics: 'pic/allPics'
@@ -166,7 +171,7 @@ export default {
       center: [47.413220, -1.219482],
       seeAdress: true,
       seeError: true,
-      data:null,
+      hotel: this.$store.state.hotel.singleHotel,
       lat: null,
       log: null,
       zoom: 24,
@@ -179,13 +184,13 @@ export default {
       getRooms: 'room/getRooms',
     }),
     async getSingleHotel(){
-      console.log(this.hotel)
-      for(let dat of this.hotel){
+      for(let dat of this.$store.state.hotel.singleHotel){
         const myArray = dat.adresse_hotel.split(" ");
         const entry = myArray.join('+')
         try{
           const response_latlon = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${entry}`)
           const result = response_latlon.data
+          // console.log(`https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${entry}`)
           if(result.length > 0){
             for(let res of result){
             this.lat = res.lat
@@ -196,18 +201,24 @@ export default {
           }else{
             this.seeAdress = !this.seeAdress
           }
-          this.seeError = !this.seeError
+          this.seeError = false
         }catch(err){
-          this.seeError = !this.seeError
+          this.seeError = true
         }
       }
     }
   },
-  created(){
+  mounted(){
     this.getHotelById(this.$route.params.id)
     this.getRooms(this.$route.params.id)
     this.getPics(this.$route.params.id)
     this.getSingleHotel()
+  },
+  async created(){
+    await this.getHotelById(this.$route.params.id)
+    await this.getRooms(this.$route.params.id)
+    await this.getSingleHotel()
+    await this.getPics(this.$route.params.id)
   }
 };
 </script>

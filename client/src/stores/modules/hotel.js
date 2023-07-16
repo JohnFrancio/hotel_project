@@ -4,13 +4,13 @@ export const hotel = {
 	namespaced: true,
 	state: {
 		hotels: null,
-		singleHotels: null
+		singleHotel: null
 	},
 	getters: {
 		allHotel: (state) => {
 			return state.hotels
 		},
-		hotel: (state) => state.singleHotels 
+		hotel: (state) => state.singleHotel
 	},
 	actions: {
 		async getHotels({ commit }, id){
@@ -24,6 +24,9 @@ export const hotel = {
 	},
 	mutations: {
 		setHotels: (state, hotel) => (state.hotels = hotel),
-		setSingleHotel: (state, hotel) => (state.singleHotels = hotel)
+		setSingleHotel: (state, hotel) => {
+			return state.singleHotel = hotel
+			// return state.singleHotel = state.singleHotel.map((item) => item.id_hotel !== hotel[0].id_hotel ? item : hotel[0])
+		},
 	}
 }

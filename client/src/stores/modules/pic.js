@@ -28,7 +28,6 @@ export const pic = {
 		},
 		async getPics({ commit }, id){
 			const response = await axios.get(`http://localhost:8081/pic/${id}`)
-			console.log(response.data)
 			commit('setPics', response.data)
 		},
 		async addPics({ commit }, credentials){

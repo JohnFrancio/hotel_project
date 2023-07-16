@@ -24,6 +24,17 @@ const getRoomById = (id_hotel, result) => {
         });
 };
 
+const getRoomByIdChambre = (id_hotel, result) => {
+    db.query('SELECT * FROM chambre INNER JOIN acc_hotel ON chambre.id_hotel = acc_hotel.id_hotel WHERE chambre.id_chambre = ?',[id_hotel], (err, results) => {
+            if (err) {
+                return result(err);
+            }
+            else {
+                return result(null, results);
+            }
+        });
+};
+
 //insert room into database
 const insertRoom = (nbr_pers, nbr_lit1, nbr_lit2, nbr_douche, nbr_tele, prix,
                 img_chambre, id_hotel, result) => {
@@ -74,6 +85,7 @@ const deleteRoom = async (id, result) => {
 module.exports = {
     getAllRoom,
     getRoomById,
+    getRoomByIdChambre,
     insertRoom,
     updateRoom,
     deleteRoom

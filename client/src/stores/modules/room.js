@@ -4,7 +4,8 @@ export const room = {
 	namespaced: true,
 	state: {
 		rooms: null,
-		allRooms: null
+		allRooms: null,
+		roomReserve:null
 	},
 	getters: {
 		allRoom: (state) => {
@@ -19,6 +20,9 @@ export const room = {
 		},
 		getAllRooms: (state) => {
 			return state.allRooms
+		},
+		getRoomReserve: (state) => {
+			return state.roomReserve
 		}
 	},
 	actions: {
@@ -39,6 +43,24 @@ export const room = {
 				response.data[i].date_chambre = date
 			}
 			commit('setAllRooms', response.data)
+		},
+		async getRoomReserve({ commit }, id){
+			const response = await axios.get(`http://localhost:8081/room/chambre/${id}`)
+			for(let i in response.data){
+				let date = new Date(response.data[i].date_chambre).toLocaleDateString(
+						'fr-FR',
+						{
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+							hour12: false,
+							hour: '2-digit',
+							minute: '2-digit'
+						}
+					)
+				response.data[i].date_chambre = date
+			}
+			commit('setRoomReserve', response.data)
 		},
 		async getRooms({ commit }, id){
 			const response = await axios.get(`http://localhost:8081/room/${id}`)
@@ -105,6 +127,10 @@ export const room = {
 	},
 	mutations: {
 		setAllRooms: (state, rooms) => (state.allRooms = rooms),
+		setRoomReserve: (state, room) => {
+			(state.roomReserve = room)
+			// return state.roomReserve = state.roomReserve.map((item) => item.id_chambre !== room[0].id_hotel ? item : room[0])
+		},
 		setRooms: (state, room) => (state.rooms = room),
 		updateRoom: (state, room) => (state.rooms = room),
 		removeRoom:(state, id) => state.rooms = state.rooms.filter((room) => room.id_chambre !== id)

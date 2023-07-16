@@ -7,6 +7,7 @@
           <v-img
             :src="`data:image/png;base64,${profils.img_user}`"
             width="300"
+            height="300"
             :aspect-ration="1"
             cover
           >            

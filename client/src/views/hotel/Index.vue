@@ -49,6 +49,11 @@
 					    </v-card-title>
 
 					    <v-card-subtitle>
+					    	<v-btn flat class="px-5">
+	                {{ cham.nbr_pers }} 
+	                <v-icon>mdi-account</v-icon>
+	                Personne
+	              </v-btn><br>
 			        	<v-btn flat class="px-5">
 			        		{{ cham.nbr_lit1 }} 
 			        		<v-icon>mdi-bed</v-icon>

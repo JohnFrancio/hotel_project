@@ -20,6 +20,15 @@ const getRoomById = (req, res) => {
     })
 }
 
+const getRoomByIdChambre = (req, res) => {
+    roomModel.getRoomByIdChambre(req.params.id, (err, results) => {
+        if (err) {
+            return res.send(err.sqlMessage);
+        }
+        return res.json(results);
+    })
+}
+
 //create a room
 const createRoom = (req, res) => {
     // const data = {		    	
@@ -73,6 +82,7 @@ const deleteRoom = (req, res) => {
 module.exports = {
     getAllRoom,
     getRoomById,
+    getRoomByIdChambre,
     createRoom,
     updateRoom,
     deleteRoom

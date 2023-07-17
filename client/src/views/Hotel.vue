@@ -4,7 +4,7 @@
       <v-main>
       <v-row justify="end">
         <v-col cols="12" sm="4"> 
-          <v-text-field outlined label="Search" class="mt-10 me-16" v-model="search"></v-text-field>
+          <v-text-field outlined label="Chercher un hotel/adresse" append-icon="mdi-home-search" class="mt-10 me-16" v-model="search"></v-text-field>
         </v-col>
       </v-row>
       <h2 class="ms-10">Nos hotels:</h2>

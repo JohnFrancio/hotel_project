@@ -31,6 +31,33 @@
           <h3 class="my-5">Membre depuis: {{profils.date_user}}</h3>
         </v-col>    
       </v-row>
+      <h2 class="ms-10 my-3 text-grey">Vos reservations:</h2>
+      <h2 v-if="countReservation==0" class="text-center mb-5">Aucune reservation pour l'instant</h2>
+      <v-table v-if="countReservation !== 0" class="mb-5">
+        <thead>
+          <th>...</th>
+          <th>Nom de l'hotel</th>
+          <th>Adresse de l'hotel</th>
+          <th>Debut de sejour</th>
+          <th>Fin de sejour</th>
+          <th>Reserver le</th>
+          <th>Identifiant du chambre</th>
+          <th>Action</th>
+        </thead>
+        <tbody  class="text-center">
+          <tr v-for="res in reservation">
+            <td><v-btn icon="mdi-delete" flat></v-btn></td>
+            <td>{{ res.nom_hotel }}</td>
+            <td>{{ res.adresse_hotel }}</td>
+            <td>{{ res.reserver_pour }}</td>
+            <td>{{ res.nbr_jour }}</td>
+            <td>{{ res.date_reservation }}</td>
+            <td>{{ res.id_chambre }}</td>
+            <v-btn v-if="res.paye == 'non'" class="mt-1 text-white" color="orange-lighten-2">Payer</v-btn>
+            <v-btn v-if="res.paye !== 'non'" class="mt-2 text-white" color="green-lighten-2" variant="text">Deja Payé</v-btn>
+          </tr>
+        </tbody>
+      </v-table>
       <v-dialog v-model="dialog" width="50%">
           <v-card>
             <v-card-text>
@@ -50,9 +77,9 @@
                      <v-btn
                       @click="dialog = false"
                       class="text-white mt-3"
-                      style="background-color:orange;"
+                      color="orange-lighten-2"
                       >
-                        Close
+                        Fermer
                       </v-btn>
                   </div>
                 </v-card-actions>
@@ -77,6 +104,8 @@ export default {
   computed:{
     ...mapGetters({
       profils: 'getProfil',
+      reservation: 'reservation/reservation',
+      countReservation: 'reservation/countReservation'
     })
   },
   components: {
@@ -141,13 +170,15 @@ export default {
       }
     },
     ...mapActions({
-      update: 'updateClient'
+      update: 'updateClient',
+      getAllReservationUser: 'reservation/getAllReservationUser'
     }),
   },
-  mounted(){
+  created(){
     this.id = this.profils.id_user
     this.nom = this.profils.nom_user
     this.contact = this.profils.contact_user
+    this.getAllReservationUser(this.id)
   }
 }
 </script>

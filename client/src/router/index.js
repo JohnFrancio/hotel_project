@@ -7,6 +7,7 @@ import UserProfil from '../views/user/Profil.vue'
 import HotelIndex from '../views/hotel/Index.vue'
 import HotelProfil from '../views/hotel/Profil.vue'
 import HotelDetails from '../views/user/HotelDetail.vue'
+import { store } from '../stores/store'
 
 const routes = [
   {
@@ -27,33 +28,50 @@ const routes = [
   {
     path: '/user/index',
     name: 'UserIndex',
-    component: UserIndex
+    component: UserIndex,
+    meta: {requiresAuth: true},
   },
   {
     path: '/user/hotel/detail/:id',
     name: 'HotelDetail',
-    component: HotelDetails
+    component: HotelDetails,
+    meta: {requiresAuth: true},
   },
   {
     path: '/hotel/index',
     name: 'HotelIndex',
-    component: HotelIndex
+    component: HotelIndex,
+    meta: {requiresAuth: true},
   },
   {
     path: '/hotel/profil',
     name: 'HotelProfil',
-    component: HotelProfil
+    component: HotelProfil,
+    meta: {requiresAuth: true},
   },
   {
     path: '/user/profil',
     name: 'UserProfil',
-    component: UserProfil
+    component: UserProfil,
+    meta: {requiresAuth: true},
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.getToken) {
+      next()
+      return
+    }
+    next('/connexion')
+  } else {
+    next()
+  }
 })
 
 export default router

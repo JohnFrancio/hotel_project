@@ -152,7 +152,7 @@
                       class="text-white mt-3"
                       style="background-color:orange;"
                       >
-                      	Close
+                      	Fermer
                       </v-btn>
               		</div>
               	</v-card-actions>
@@ -163,79 +163,79 @@
 	      <v-dialog v-model="dialog" width="50%">
 	      	<v-card>
 	      		<v-card-text>
-                    <v-form @submit.prevent="addRoom" class="px-5" ref="form"> 
-                    	<h3 class="text-center mb-3" >Ajout d'une chambre pour {{ user.nom_hotel }}</h3>
-                    	<v-divider class="mb-3"></v-divider>
-                    	<h4>Le nombre de personne: <br>
-                    		<v-radio-group inline :rules="[(this.nbr_pers == 0) ? 'Choisir une personne' : true]" v-model="nbr_pers">
-                    			<v-radio label="1 Personne" value="1"></v-radio>
-                    			<v-radio label="2 Personnes" value="2"></v-radio>
-                    			<v-radio label="4 Personnes" value="4"></v-radio>
-                    			<v-radio label="6 Personnes" value="6"></v-radio>
-                    		</v-radio-group>
-                    	</h4>
-                    	<h4>Le nombre de lit 1 place: <br>
-                    		<v-radio-group inline v-model="nbr_lit1">
-                    			<v-radio label="1 lit" value="1"></v-radio>
-                    			<v-radio label="2 lits" value="2"></v-radio>
-                    			<v-radio label="4 lits" value="4"></v-radio>
-                    		</v-radio-group>
-                    	</h4> 
-                    	<h4>Le nombre de lit 2 places: <br>
-                    		<v-radio-group inline v-model="nbr_lit2">
-                    			<v-radio label="1 lit" value="1"></v-radio>
-                    			<v-radio label="2 lits" value="2"></v-radio>
-                    			<v-radio label="4 lits" value="4"></v-radio>
-                    		</v-radio-group>
-                    	</h4>
-                    	<h4>Le nombre de douche: <br>
-                    		<v-radio-group inline :rules="[(this.nbr_douche == 0) ? 'Choisir une personne' : true]" v-model="nbr_douche">
-                    			<v-radio label="1 douche" value="1"></v-radio>
-                    			<v-radio label="2 douches" value="2"></v-radio>
-                    		</v-radio-group>
-                    	</h4>
-                    	<h4>Le nombre de television: <br>
-                    		<v-radio-group inline v-model="nbr_tele">
-                    			<v-radio label="1 television" value="1"></v-radio>
-                    			<v-radio label="2 televisions" value="2"></v-radio>
-                    		</v-radio-group>
-                    	</h4>  
-                    	<v-row>
-	                        <v-col cols="12" sm="6">
-	                          <v-text-field :rules="priceRules" outlined v-model="prix" label="Prix" color="blue" autocomplete="false"></v-text-field>
-	                        </v-col>
-	                        <v-col cols="12" sm="6">
-	                          <v-file-input accept="image/*" :rules="[v => (v==false) ? 'Image du chambre requis' : true]" @change="roomImg" label="Photo de la chambre"></v-file-input>
-	                        </v-col>
-	                     </v-row>
-                    	<v-card-actions>
-                    		<div class="text-center">
-                    			<v-btn
-                    					v-if="add == true"
-	                            @click="addRoom"
-	                            class="text-white mt-3 mx-5"
-	                            style="background-color:#0862a0;"
-		                          >
-		                          Envoyer
-	                          </v-btn>
-	                          <v-btn
-                    					v-if="add == false"
-	                            @click="editRoom"
-	                            class="text-white mt-3 mx-5"
-	                            style="background-color:#0862a0;"
-		                          >
-		                          Modifier
-	                          </v-btn>
-	                         <v-btn
-                            @click="closeAddRoom"
-                            class="text-white mt-3"
-                            style="background-color:orange;"
-	                          >
-	                          	Close
-	                          </v-btn>
-                    		</div>
-                    	</v-card-actions>
-                    </v-form>
+              <v-form @submit.prevent="addRoom" class="px-5" ref="form"> 
+              	<h3 class="text-center mb-3" >Ajout d'une chambre pour {{ user.nom_hotel }}</h3>
+              	<v-divider class="mb-3"></v-divider>
+              	<h4>Le nombre de personne: <br>
+              		<v-radio-group inline :rules="[(this.nbr_pers == 0) ? 'Choisir une personne' : true]" v-model="nbr_pers">
+              			<v-radio label="1 Personne" value="1"></v-radio>
+              			<v-radio label="2 Personnes" value="2"></v-radio>
+              			<v-radio label="4 Personnes" value="4"></v-radio>
+              			<v-radio label="6 Personnes" value="6"></v-radio>
+              		</v-radio-group>
+              	</h4>
+              	<h4>Le nombre de lit 1 place: <br>
+              		<v-radio-group inline v-model="nbr_lit1">
+              			<v-radio label="1 lit" value="1"></v-radio>
+              			<v-radio label="2 lits" value="2"></v-radio>
+              			<v-radio label="4 lits" value="4"></v-radio>
+              		</v-radio-group>
+              	</h4> 
+              	<h4>Le nombre de lit 2 places: <br>
+              		<v-radio-group inline v-model="nbr_lit2">
+              			<v-radio label="1 lit" value="1"></v-radio>
+              			<v-radio label="2 lits" value="2"></v-radio>
+              			<v-radio label="4 lits" value="4"></v-radio>
+              		</v-radio-group>
+              	</h4>
+              	<h4>Le nombre de douche: <br>
+              		<v-radio-group inline :rules="[(this.nbr_douche == 0) ? 'Choisir une personne' : true]" v-model="nbr_douche">
+              			<v-radio label="1 douche" value="1"></v-radio>
+              			<v-radio label="2 douches" value="2"></v-radio>
+              		</v-radio-group>
+              	</h4>
+              	<h4>Le nombre de television: <br>
+              		<v-radio-group inline v-model="nbr_tele">
+              			<v-radio label="1 television" value="1"></v-radio>
+              			<v-radio label="2 televisions" value="2"></v-radio>
+              		</v-radio-group>
+              	</h4>  
+              	<v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field :rules="priceRules" outlined v-model="prix" label="Prix" color="blue" autocomplete="false"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-file-input accept="image/*" :rules="[v => (v==false) ? 'Image du chambre requis' : true]" @change="roomImg" label="Photo de la chambre"></v-file-input>
+                    </v-col>
+                 </v-row>
+              	<v-card-actions>
+              		<div class="text-center">
+              			<v-btn
+              					v-if="add == true"
+                        @click="addRoom"
+                        class="text-white mt-3 mx-5"
+                        style="background-color:#0862a0;"
+                        >
+                        Envoyer
+                      </v-btn>
+                      <v-btn
+              					v-if="add == false"
+                        @click="editRoom"
+                        class="text-white mt-3 mx-5"
+                        style="background-color:#0862a0;"
+                        >
+                        Modifier
+                      </v-btn>
+                     <v-btn
+                      @click="closeAddRoom"
+                      class="text-white mt-3"
+                      style="background-color:orange;"
+                      >
+                      	Fermer
+                      </v-btn>
+              		</div>
+              	</v-card-actions>
+              </v-form>
 	      		</v-card-text>
 	      	</v-card>
 	      </v-dialog>

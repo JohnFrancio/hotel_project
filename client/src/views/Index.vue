@@ -34,15 +34,6 @@
                     <v-icon class="ml-2" color="white">mdi-login</v-icon>
                   </v-btn>
                 </router-link>
-                <router-link to="inscription">
-                  <v-btn
-                    class="text-white"
-                    style="background-color:orange;"
-                  >
-                    Inscription
-                    <v-icon class="ml-2" color="white">mdi-account-plus</v-icon>
-                  </v-btn>
-                </router-link>
               </div>
               </v-col>
             </VRow>
@@ -53,6 +44,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { defineComponent } from "vue";
 import Header from "../components/Header.vue";
 // Components
@@ -62,17 +54,25 @@ export default defineComponent({
   data(){
     return{
       items : [{
-          title:"A propos",
-          route:"about"
-        },{
           title:"Hotel",
           route:"hotel"
         }
       ]
     }
   },
+  methods: {
+    ...mapActions({
+      LogOut: 'LogOut'
+    })
+  },
   components: {
     Header
   },
+  created() {
+    this.LogOut()
+  },
+  mounted() {
+    this.LogOut()
+  }
 });
 </script>

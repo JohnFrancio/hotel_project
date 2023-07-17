@@ -2,97 +2,85 @@
   <v-app>
     <v-main>
       <HeaderUser/>
-      <v-dialog v-model="dialog" width="80%">
-        <v-card
-          height="490px"
-          class="my-10 mx-10"
-        >
-          <v-card-text>
-            <v-row align="center">   
-              <v-col cols="12" sm="6">
-                <v-card
-                  height="450px"
-                >
-                  <v-img
-                    :src="`data:image/png;base64,${singleRoom[0].img_chambre}`"
-                    height="200px"
-                    cover
-                  ></v-img>
+      <el-dialog v-model="dialog" height="50%" center="true" width="70%" title="Reservation d'une chambre">
+        <v-row align="center">   
+          <v-col cols="12" sm="6">
+            <v-card
+              height="450px"
+            >
+              <v-img
+                :src="`data:image/png;base64,${singleRoom[0].img_chambre}`"
+                height="200px"
+                cover
+              ></v-img>
 
-                  <v-card-title>
-                    <v-icon
-                      color="#949cf7"
-                      icon="mdi-calendar"
-                      width="100"
-                    ></v-icon>
+              <v-card-title>
+                <v-icon
+                  color="#949cf7"
+                  icon="mdi-calendar"
+                  width="100"
+                ></v-icon>
 
-                    <span class="text-medium-emphasis text-caption">{{ (singleRoom[0].date_chambre) }}</span>
-                    <v-spacer></v-spacer>
-                    <v-avatar
-                      :image="`data:image/png;base64,${singleRoom[0].img_hotel}`"
-                      size="x-small"
-                    ></v-avatar><span class="text-medium-emphasis text-caption">   Chambre de l'hotel {{ singleRoom[0].nom_hotel }}</span>
-                  </v-card-title>
+                <span class="text-medium-emphasis text-caption">{{ (singleRoom[0].date_chambre) }}</span>
+                <v-spacer></v-spacer>
+                <v-avatar
+                  :image="`data:image/png;base64,${singleRoom[0].img_hotel}`"
+                  size="x-small"
+                ></v-avatar><span class="text-medium-emphasis text-caption">   Chambre de l'hotel {{ singleRoom[0].nom_hotel }}</span>
+              </v-card-title>
 
-                  <v-card-subtitle>
-                    <v-btn flat class="px-5">
-                      {{ singleRoom[0].nbr_pers }} 
-                      <v-icon>mdi-account</v-icon>
-                      Personne
-                    </v-btn><br>
-                    <v-btn flat class="px-5">
-                      {{ singleRoom[0].nbr_lit1 }} 
-                      <v-icon>mdi-bed</v-icon>
-                      1 Place
-                    </v-btn>
-                    <v-btn flat class="px-5">
-                      {{ singleRoom[0].nbr_lit2 }} 
-                      <v-icon>mdi-bed</v-icon>
-                      2 Places
-                    </v-btn> <br>
-                    <v-btn flat class="px-5">
-                      {{ singleRoom[0].nbr_douche }} 
-                      <v-icon>mdi-toilet</v-icon>
-                      Douche
-                    </v-btn>  
-                    <v-btn flat class="px-5">
-                      {{ singleRoom[0].nbr_tele }} 
-                      <v-icon>mdi-television</v-icon>
-                      TV
-                    </v-btn>
-                    <h2 class="mt-4 text-red">{{ singleRoom[0].prix.toLocaleString("en-US") }} Ar</h2>
-                  </v-card-subtitle>
-                </v-card>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-form @submit.prevent="reserve" class="px-5" ref="form"> 
-                  <v-date-picker
-                  ></v-date-picker>
-                  <div class="text-center">
-                      <v-btn
-                        @click="reserve"
-                        class="text-white mt-3 mx-5"
-                        style="background-color:green;"
-                        >
-                        Reserver
-                      </v-btn>
-                     <v-btn
-                      @click="dialog = false"
-                      class="text-white mt-3"
-                      style="background-color:orange;"
-                      >
-                        Close
-                      </v-btn>
-                  </div>
-                </v-form>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+              <v-card-subtitle>
+                <v-btn flat class="px-5">
+                  {{ singleRoom[0].nbr_pers }} 
+                  <v-icon>mdi-account</v-icon>
+                  Personne
+                </v-btn><br>
+                <v-btn flat class="px-5">
+                  {{ singleRoom[0].nbr_lit1 }} 
+                  <v-icon>mdi-bed</v-icon>
+                  1 Place
+                </v-btn>
+                <v-btn flat class="px-5">
+                  {{ singleRoom[0].nbr_lit2 }} 
+                  <v-icon>mdi-bed</v-icon>
+                  2 Places
+                </v-btn> <br>
+                <v-btn flat class="px-5">
+                  {{ singleRoom[0].nbr_douche }} 
+                  <v-icon>mdi-toilet</v-icon>
+                  Douche
+                </v-btn>  
+                <v-btn flat class="px-5">
+                  {{ singleRoom[0].nbr_tele }} 
+                  <v-icon>mdi-television</v-icon>
+                  TV
+                </v-btn>
+                <h2 class="mt-4 text-red">{{ singleRoom[0].prix.toLocaleString("en-US") }} Ar</h2>
+              </v-card-subtitle>
+            </v-card>
+          </v-col>
+          <v-col cols="12" sm="6" class="text-center">
+            <v-form @submit.prevent="reserver" class="px-5" ref="form">
+              <h2 class="mb-5">Choisissez votre date</h2>
+              <el-date-picker v-model="dateValue"
+              type="daterange" range-separator="a" start-placeholder="Debut du sejour" end-placeholder="Fin du sejour"
+              :size="default" /><br>
+              <p v-if="error" class="text-red">Veuillez choisir une date</p>              
+              <div class="text-center">
+                <v-btn @click=" reserver(singleRoom[0].id_chambre)" class="text-white mt-3 mx-5" style="background-color:green;">
+                  Reserver
+                </v-btn>
+                <v-btn @click="dialog = false" class="text-white mt-3" style="background-color:orange;">
+                  Fermer
+                </v-btn>
+              </div>
+            </v-form>
+          </v-col>
+        </v-row>
+      </el-dialog>
       <v-row justify="end">
         <v-col cols="12" sm="4">
-          <v-text-field outlined label="Search" class="mt-10 me-16" v-model="search"></v-text-field>
+          <v-text-field outlined append-icon="mdi-home-search" label="Chercher un hotel/adresse" class="mt-10 me-16" v-model="search"></v-text-field>
         </v-col>
       </v-row>
       <h2 class="ms-10">Nos hotels:</h2>
@@ -240,7 +228,8 @@ export default {
     ...mapGetters({
       hotels: 'hotel/allHotel',
       rooms: 'room/getAllRooms',
-      singleRoom: 'room/getRoomReserve'
+      singleRoom: 'room/getRoomReserve',
+      getProfil: 'getProfil'
     }),
     filterHotel(){
       return this.hotels?.filter((hotel) => {
@@ -258,7 +247,8 @@ export default {
   },
   data(){
     return{
-      range:['2023-07-13', '2023-07-25'],
+      error:false,
+      dateValue: null,
       search:"",
       dialog: false,
       show: false
@@ -276,6 +266,38 @@ export default {
     async getCham(id){
       await this.getRoomReserve(id)
       this.dialog=true
+    },
+    async reserver(id) {
+      const date = (date) => {
+        return [
+          date.getFullYear(),
+          ((date.getMonth() + 1) < 10) ? `0${date.getMonth() + 1}` : date.getMonth() + 1,
+          date.getDate(),
+        ].join('-')
+      }
+      if(this.dateValue == null){
+        this.error = true
+        setTimeout(() => {
+          return this.error = false
+        }, 3000)
+      }else{
+        let form = new FormData()
+        form.append('id_user', this.getProfil.id_user)
+        form.append('id_chambre', id)
+        form.append('reserver_le', this.dateValue[0])
+        form.append('nbr_jour', this.dateValue[1])
+        console.log(this.getProfil.id_user, id, this.dateValue[0], this.dateValue[1])
+        const response = await axios.post('http://localhost:8081/reservation', {
+          id_user: this.getProfil.id_user,
+          id_chambre: id,
+          reserver_pour: date(new Date(this.dateValue[0])),
+          nbr_jour: date(new Date(this.dateValue[1]))
+        })
+        if(response.data.fieldCount == 0){
+          this.dialog = false
+          this.dateValue = null
+        }
+      }
     }
   },
   created(){

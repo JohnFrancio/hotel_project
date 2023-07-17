@@ -3,6 +3,8 @@ import createPersistedState from "vuex-persistedstate"
 import { room } from './modules/room'
 import { hotel } from './modules/hotel'
 import { pic } from './modules/pic'
+import { reservation } from './modules/reservation'
+import { avis } from './modules/avis'
 import axios from 'axios'
 
 
@@ -14,14 +16,17 @@ export const store = createStore({
   modules:{
     room,
     hotel,
-    pic
+    pic,
+    reservation,
+    avis
   },
   state: {
     token: null,
     user: Array()
   },
   getters:{
-    getProfil: (state) => (state.user[0])
+    getProfil: (state) => (state.user[0]),
+    getToken: (state) => state.token
   },
   actions:{
     async updateClient({ commit }, credentials){
@@ -64,7 +69,11 @@ export const store = createStore({
       commit('updateHotel', datas.data)
       console.log(datas.data)
       return response.data.fieldCount
-    }
+    },
+    async LogOut({commit}){
+      let user = null
+      commit('logout', user)
+    }    
   },
   mutations: {
     updateClient(state, client){
@@ -74,7 +83,11 @@ export const store = createStore({
       return state.user = state.user.map((item) => item.id_hotel !== hotel[0].id_hotel ? item : hotel[0])
     },
     setToken: (state, token) => state.token = token,
-    setUser: (state, user) => state.user = Array(user)
+    setUser: (state, user) => state.user = Array(user),
+    logout(state){
+      state.user = null
+      state.token = null
+    },
   }
 })
 

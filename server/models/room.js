@@ -61,13 +61,13 @@ const insertRoom = (nbr_pers, nbr_lit1, nbr_lit2, nbr_douche, nbr_tele, prix,
 //update room in database
 const updateRoom = async (data, id, result) => {
     db.query('UPDATE chambre SET? WHERE id_chambre =?', [data, id], (err, results) => {
-            if (err) {
-                return result(err);
-            }
-            else {
-                return result(null, results);
-            }
-        });
+        if (err) {
+            return result(err);
+        }
+        else {
+            return result(null, results);
+        }
+    });
 };
 
 //delete room from database

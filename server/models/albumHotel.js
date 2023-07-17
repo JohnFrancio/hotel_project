@@ -26,8 +26,9 @@ const getPicById = (id, result) => {
 
 //insert album into database
 const insertPic = async (img, id_hotel, result) => {
-    for(let i in img){
-        db.query('INSERT INTO image(img, id_hotel) VALUES(?, ?)', [img[i], id_hotel], (err, results) => {
+    for(var i in img){
+        val = img[i]
+        db.query('INSERT INTO image(img, id_hotel) VALUES(?, ?)', [val, id_hotel], (err, results) => {
             if (err) {
                 return result(err);
             }

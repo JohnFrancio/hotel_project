@@ -3,6 +3,9 @@ const hotelController = require('../controllers/hotel');
 const authController = require('../controllers/auth');
 const roomController = require('../controllers/room');
 const albumController = require('../controllers/albumHotel');
+const avisController = require('../controllers/avis');
+const reservationController = require('../controllers/reservation');
+
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -41,5 +44,18 @@ router.get('/pic', albumController.getAllPic);
 router.get('/pic/:id', albumController.getPicById);
 router.post('/pic',upload.array('image'), albumController.createPic);
 router.delete('/pic/:id', albumController.deletePic);
+
+//routes for reservation
+router.get('/reservation/hotel/:id', reservationController.getReservationByHotelid);
+router.get('/reservation/user/:id', reservationController.getReservationByUserid);
+router.post('/reservation', reservationController.createReservation);
+router.put('/reservation/:id', reservationController.updateReservation);
+router.delete('/reservation/:id', reservationController.deleteReservation);
+
+//routes for avis
+router.get('/avis', avisController.getAvis);
+router.get('/avis/:id', avisController.getAvisHotelId);
+router.post('/avis', avisController.insertAvis);
+router.delete('/avis/:id', avisController.deleteAvis);
 
 module.exports = router;

@@ -23,13 +23,14 @@ const getPicById = (req, res) => {
 //create a hotel
 const createPic = (req, res) => {
     let output = []
-    for(let i in req.files){
+    for(var i = 0; i < req.files.length; i++){
         let test = req.files[i].buffer.toString('base64')
         output.push(test)
     }
     const id_hotel=req.body.id_hotel
     albumHotelModel.insertPic(output, id_hotel, (err, result) => {
         if (err) {
+            throw err;
             return res.send(err);
         }
         return res.json(result);

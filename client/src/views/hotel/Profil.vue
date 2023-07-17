@@ -15,7 +15,7 @@
           <h3>Nombre de photo present dans le profile: {{ countPic }}</h3>
         </v-col>
       </v-row>
-      <v-row class="ms-sm-2 px-3 mt-3 mb-5">
+      <v-row class="ms-sm-2 px-3 my-3">
         <v-col cols="12" sm="6">
           <v-img
             :src="`data:image/png;base64,${profils.img_hotel}`"
@@ -62,6 +62,51 @@
           </v-card>
         </v-col>    
       </v-row>
+      <div class="text-center">
+        <v-btn append-icon="mdi-comment" @click="dialog2 = true" class="text-h6" color="#0862a0" variant="text">{{ countAvis }} Avis</v-btn>
+      </div>
+      <v-dialog v-model="dialog2" width="80%">
+        <v-card>
+          <v-card-text>
+            <div align="center" justify="center" v-if="countAvis == 0">
+              <h3>Auncun avis sur {{ profils.nom_hotel }}</h3>
+            </div>
+            <div v-if="countAvis !== 0">
+              <h3 class="text-center my-3"> Les avis sur {{ profils.nom_hotel }}</h3>
+              <v-divider></v-divider>
+              <v-row class="mt-3">
+                <v-col cols="12" sm="6" v-for="avis in avisHotel">
+                  <v-card
+                    prepend-icon="mdi-comment"
+                  >
+                    <template v-slot:title> Avis donner par {{ avis.nom_user }} </template>
+                    <v-divider></v-divider>
+                    <v-card-title>
+                      <v-icon
+                        color="#949cf7"
+                        icon="mdi-calendar"
+                        width="100"
+                      ></v-icon>
+                      <span class="me-16 text-medium-emphasis text-subtitle-2">{{ (avis.date_avis) }}</span>
+                      <span class="ms-16"></span>
+                      <span class="ms-16"></span>
+                      <span class="ms-14"></span>
+                      <v-avatar
+                        class="ms-16"
+                        :image="`data:image/png;base64,${avis.img_user}`"
+                        size="small"
+                      ></v-avatar>
+                      <v-card-text class="text-center">
+                        {{ avis.avis }}
+                      </v-card-text>
+                    </v-card-title>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <v-dialog v-model="dialog" width="50%">
           <v-card>
             <v-card-text>
@@ -111,6 +156,33 @@
             </v-card-text>
           </v-card>
         </v-dialog>
+      <h2 class="ms-10 my-3 text-grey">Reservations:</h2>
+      <h2 v-if="countReservation==0" class="text-center mb-5">Aucune reservation pour l'instant</h2>
+      <v-table v-if="countReservation !== 0" class="mb-5">
+        <thead>
+          <th>...</th>
+          <th>Nom du client</th>
+          <th>Contact client</th>
+          <th>Debut de sejour</th>
+          <th>Fin de sejour</th>
+          <th>Reserver le</th>
+          <th>Identifiant du chambre</th>
+          <th>Action</th>
+        </thead>
+        <tbody  class="text-center">
+          <tr v-for="res in reservation">
+            <td><v-btn icon="mdi-delete" flat></v-btn></td>
+            <td>{{ res.nom_user }}</td>
+            <td>{{ res.contact_user }}</td>
+            <td>{{ res.reserver_pour }}</td>
+            <td>{{ res.nbr_jour }}</td>
+            <td>{{ res.date_reservation }}</td>
+            <td>{{ res.id_chambre }}</td>
+            <v-btn v-if="res.paye == 'non'" class="mt-1 text-white" color="red-lighten-2" variant="text">Non payé</v-btn>
+            <v-btn v-if="res.paye !== 'non'" class="mt-2 text-white" color="green-lighten-2" variant="text">Deja Payé</v-btn>
+          </tr>
+        </tbody>
+      </v-table>
     </v-main>
   </v-app>
 </template>
@@ -129,7 +201,11 @@ export default {
     ...mapGetters({
       profils: 'getProfil',
       countRoom: 'room/countRoom',
-      countPic: 'pic/countPics'
+      countPic: 'pic/countPics',
+      reservation: 'reservation/reservation',
+      countReservation: 'reservation/countReservation',
+      avisHotel: 'avis/avisHotel',
+      countAvis: 'avis/countAvis',
     })
   },
   components: {
@@ -148,6 +224,7 @@ export default {
       log: null,
       zoom: 24,
       dialog: false,
+      dialog2: false,
       id:"",
       nom:"",
       adresse:"",
@@ -225,11 +302,15 @@ export default {
       }
     },
     ...mapActions({
+      getAllReservationHotel: 'reservation/getAllReservationHotel',
+      getAvisHotel: 'avis/getAvisHotel',
       update: 'updateHotel'
     }),
   },
   created(){
     this.getLatLon()
+    this.getAllReservationHotel(this.profils.id_hotel)
+    this.getAvisHotel(this.profils.id_hotel)
   }
 }
 </script>

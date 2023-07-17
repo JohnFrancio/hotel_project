@@ -34,6 +34,7 @@ export const pic = {
 			const response = await axios.post('http://localhost:8081/pic', credentials.form)
 			const datas = await axios.get(`http://localhost:8081/pic/${credentials.id}`)
 			commit('updatePic', datas.data)
+			console.log(response)
 			return response.data.fieldCount
 		},
 		async deletePic({ commit }, id){

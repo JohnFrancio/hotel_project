@@ -23,7 +23,6 @@ export const user = {
 		async getUser({ commit }){
 			const response = await axios.get(`http://localhost:8081/user`)
 			commit('setUsers', response.data)
-			console.log(response.data)
 			return response.data
 		},
 		async getUserById({ commit }, id){

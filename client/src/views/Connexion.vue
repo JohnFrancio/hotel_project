@@ -254,7 +254,6 @@
       },
       hotelImg(event){
         this.img_hotel = event.target.files[0]
-        console.log(this.img_hotel)
       },
       clientInscri(){
         this.clientIn = true
@@ -275,8 +274,8 @@
           form.append('mdp_user', this.mdp2_user_inscri)
           form.append('img_user', this.img_user)
           axios.post("http://localhost:8081/user",form).then((response)=>{
-            console.log(response)
-            if(response.data){
+            const type = typeof response.data
+            if(type == "string"){
               this.existEmail = !this.existEmail
               if(this.existEmail){
                 setTimeout(() => {

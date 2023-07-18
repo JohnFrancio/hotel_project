@@ -95,7 +95,9 @@ export default{
 	  	getHotels: 'hotel/getHotels',
 	  	getAllReservation: 'reservation/getAllReservation',
 	  	getAvis: 'avis/getAvis',
-	  	getUser: 'user/getUser'
+	  	getUser: 'user/getUser',
+	  	getAllPics: 'pic/getAllPics',
+	  	getAllRoomsFromBack: 'room/getAllRoomsFromBack'
 	  })
 	},
 	created(){
@@ -103,6 +105,8 @@ export default{
 		this.getHotels()
 		this.getUser()
 		this.getAllReservation()
+		this.getAllRoomsFromBack()
+		this.getAllPics()
 	}
 }
 </script>

@@ -23,7 +23,6 @@ const getUserById = (req, res) => {
 
 // create user
 const createUser = (req, res) => {
-    console.log(req.file)
     const data = {
         nom_user: req.body.nom_user,
         email_user: req.body.email_user,

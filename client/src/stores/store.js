@@ -5,6 +5,7 @@ import { hotel } from './modules/hotel'
 import { pic } from './modules/pic'
 import { reservation } from './modules/reservation'
 import { avis } from './modules/avis'
+import { user } from './modules/user'
 import axios from 'axios'
 
 
@@ -18,7 +19,8 @@ export const store = createStore({
     hotel,
     pic,
     reservation,
-    avis
+    avis,
+    user
   },
   state: {
     token: null,

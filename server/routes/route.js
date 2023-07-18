@@ -49,6 +49,7 @@ router.delete('/pic/:id', albumController.deletePic);
 router.get('/reservation/hotel/:id', reservationController.getReservationByHotelid);
 router.get('/reservation/user/:id', reservationController.getReservationByUserid);
 router.post('/reservation', reservationController.createReservation);
+router.get('/reservation', reservationController.getReservation);
 router.put('/reservation/:id', reservationController.updateReservation);
 router.delete('/reservation/:id', reservationController.deleteReservation);
 

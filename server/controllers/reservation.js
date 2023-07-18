@@ -10,6 +10,15 @@ const getReservationByHotelid = (req, res) => {
     })
 };
 
+const getReservation = (req, res) => {
+    reservationModel.getReservation((err,results)=>{
+        if (err) {
+            return res.send(err.sqlMessage);
+        }
+        return res.json(results);
+    })
+};
+
 //get reservation by id user
 const getReservationByUserid = (req, res) => {
     reservationModel.getReservationByUserid(req.params.id, (err, results) => {
@@ -59,6 +68,7 @@ const deleteReservation = (req, res) => {
 module.exports = {
     getReservationByHotelid,
     getReservationByUserid,
+    getReservation,
     createReservation,
     updateReservation,
     deleteReservation

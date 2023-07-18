@@ -17,7 +17,14 @@ export const pic = {
 			}
 			return count
 		},
-		getAllPics: (state) => {
+		countAllPics: (state) => {
+			let count = 0
+			for(let j in state.allPics){
+				count++
+			}
+			return count
+		},
+		getAllPic: (state) => {
 			return state.allPics
 		}
 	},
@@ -37,15 +44,23 @@ export const pic = {
 			console.log(response)
 			return response.data.fieldCount
 		},
-		async deletePic({ commit }, id){
+		async deletePic({ state, commit }, id){
 			const response = await axios.delete(`http://localhost:8081/pic/${id}`)
-			commit('removePic', id)
+			if(state.pics){
+				commit('removePic', id)
+			}
+			commit('removePicGlobal', id)
+		},
+		async LogOut({ state }){
+			state.pics = null
+			state.allPics = null
 		}
 	},
 	mutations: {
 		setAllPics: (state, pics) => (state.allPics = pics),
 		setPics: (state, pic) => (state.pics = pic),
 		updatePic: (state, pic) => (state.pics = pic),
-		removePic:(state, id) => state.pics = state.pics.filter((pic) => pic.id_img !== id)
+		removePic:(state, id) => state.pics = state.pics.filter((pic) => pic.id_img !== id),
+		removePicGlobal:(state, id) => state.allPics = state.allPics.filter((pic) => pic.id_img !== id)
 	}
 }

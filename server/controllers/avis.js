@@ -2,7 +2,7 @@ const avisModel = require('../models/avis');
 
 //get all avis
 const getAvis = (req, res) => {
-    avisModel.getAllRoom((err,results)=>{
+    avisModel.getAvis((err,results)=>{
         if (err) {
             return res.send(err.sqlMessage);
         }

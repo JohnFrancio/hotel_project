@@ -2,7 +2,7 @@ const db = require('../connexion/db')
 
 //get album from database
 const getAllPic = (result) => {
-    db.query('SELECT * FROM image', (err, results) => {
+    db.query('SELECT * FROM image INNER JOIN acc_hotel ON acc_hotel.id_hotel=image.id_hotel', (err, results) => {
             if (err) {
                 return result(err);
             }

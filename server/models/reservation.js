@@ -14,6 +14,18 @@ const getReservationByHotelid = (id, result) => {
         });
 };
 
+const getReservation = (result) => {
+    db.query(`SELECT * FROM reservation INNER JOIN chambre ON reservation.id_chambre=chambre.id_chambre
+    INNER JOIN user ON user.id_user=reservation.id_user INNER JOIN acc_hotel ON chambre.id_hotel=acc_hotel.id_hotel`, (err, results) => {
+            if (err) {
+                return result(err);
+            }
+            else {
+                return result(null, results);
+            }
+        });
+};
+
 // get reservation by id
 const getReservationByUserid = (id, result) => {
     db.query(`SELECT nom_hotel, adresse_hotel, reserver_pour, nbr_jour, date_reservation, paye, chambre.id_chambre
@@ -69,5 +81,6 @@ module.exports = {
     getReservationByUserid,
     insertReservation,
     updateReservation,
-    deleteReservation
+    deleteReservation,
+    getReservation
 }

@@ -376,6 +376,13 @@
               this.password = ""
               } 
             }else{
+              if(response.data.role == "admin"){
+                const user = response.data.user
+                const token = response.data.token
+                this.setToken(token)
+                this.setUser(user)
+                this.$router.push('/admin/index')
+              }
               if(response.data.role == "user"){
                 let date = new Date(response.data.user.date_user).toLocaleDateString(
                     'fr-FR',

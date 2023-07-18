@@ -7,6 +7,13 @@ import UserProfil from '../views/user/Profil.vue'
 import HotelIndex from '../views/hotel/Index.vue'
 import HotelProfil from '../views/hotel/Profil.vue'
 import HotelDetails from '../views/user/HotelDetail.vue'
+import AdminIndex from '../views/admin/Index.vue'
+import AdminHotel from '../views/admin/Hotel.vue'
+import AdminClient from '../views/admin/Client.vue'
+import AdminAvis from '../views/admin/Avis.vue'
+import AdminChambre from '../views/admin/Chambre.vue'
+import AdminReservation from '../views/admin/Reservation.vue'
+import AdminImage from '../views/admin/Image.vue'
 import { store } from '../stores/store'
 
 const routes = [
@@ -53,6 +60,43 @@ const routes = [
     path: '/user/profil',
     name: 'UserProfil',
     component: UserProfil,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: '/admin/index',
+    name: 'AdminIndex',
+    component: AdminIndex,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: '/admin/hotel',
+    name: 'AdminHotel',
+    component: AdminHotel,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/client',
+    name: 'AdminClient',
+    component: AdminClient,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/avis',
+    name: 'AdminAvis',
+    component: AdminAvis,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/reservation',
+    name: 'AdminReservation',
+    component: AdminReservation,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/chambre',
+    name: 'AdminChambre',
+    component: AdminChambre,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/image',
+    name: 'AdminImage',
+    component: AdminImage,
     meta: {requiresAuth: true},
   },
 ]

@@ -18,6 +18,13 @@ export const room = {
 			}
 			return count
 		},
+		countAllRoom: (state) => {
+			let count = 0
+			for(let j in state.allRooms){
+				count++
+			}
+			return count
+		},
 		getAllRooms: (state) => {
 			return state.allRooms
 		},
@@ -26,7 +33,7 @@ export const room = {
 		}
 	},
 	actions: {
-		async getAllRooms({ commit }){
+		async getAllRoomsFromBack({ commit }){
 			const response = await axios.get(`http://localhost:8081/room`)
 			for(let i in response.data){
 				let date = new Date(response.data[i].date_chambre).toLocaleDateString(
@@ -120,9 +127,16 @@ export const room = {
 			commit('updateRoom', datas.data)
 			return response.data.fieldCount
 		},
-		async deleteRoom({ commit }, id){
+		async deleteRoom({ state, commit }, id){
 			const response = await axios.delete(`http://localhost:8081/room/${id}`)
-			commit('removeRoom', id)
+			if(state.rooms){
+				commit('removeRoom', id)
+			}
+			commit('removeRoomGlobal', id)
+		},
+		async LogOut({ state }){
+			state.rooms = null
+			state.allRooms = null
 		}
 	},
 	mutations: {
@@ -133,6 +147,7 @@ export const room = {
 		},
 		setRooms: (state, room) => (state.rooms = room),
 		updateRoom: (state, room) => (state.rooms = room),
-		removeRoom:(state, id) => state.rooms = state.rooms.filter((room) => room.id_chambre !== id)
+		removeRoom:(state, id) => state.rooms = state.rooms.filter((room) => room.id_chambre !== id),
+		removeRoomGlobal:(state, id) => state.allRooms = state.allRooms.filter((room) => room.id_chambre !== id)
 	}
 }

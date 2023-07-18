@@ -20,7 +20,18 @@ const getHotelEmail = (email, result) => {
 	})
 }
 
+const getAdminEmail = (email, result) => {
+	db.query('SELECT * FROM admin WHERE email_admin = ?', [email], (err, results) => {
+		if(err){
+			return result(err)
+		}else{
+			return result(null, results)
+		}
+	})
+}
+
 module.exports = {
 	getUserEmail,
-	getHotelEmail
+	getHotelEmail,
+	getAdminEmail
 }

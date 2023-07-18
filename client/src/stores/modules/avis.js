@@ -19,6 +19,13 @@ export const avis = {
 				c++
 			}
 			return c
+		},
+		countAllAvis: (state) => {
+			let c = 0
+			for(let i in state.avis){
+				c++
+			}
+			return c
 		}
 	},
 	actions: {
@@ -56,14 +63,22 @@ export const avis = {
 			const response = await axios.post('http://localhost:8081/avis', credentials)
 			return response.data.fieldCount
 		},
-		async deleteAvis({ commit }, id){
+		async deleteAvis({ state, commit }, id){
 			const response = await axios.delete(`http://localhost:8081/avis/${id}`)
-			commit('removeAvis', id)
+			if(state.avisHotel){
+				commit('removeAvis', id)
+			}
+			commit('removeAvisGlobal', id)
+		},
+		async LogOut({ state }){
+			state.avis = null
+			state.avisHotel = null
 		}
 	},
 	mutations: {
 		setAvis: (state, avis) => (state.avis = avis),
 		setAvisHotel: (state, avis) => (state.avisHotel = avis),
-		removeAvis:(state, id) => state.avisHotel = state.avisHotel.filter((av) => av.id_avis !== id)
+		removeAvis:(state, id) => state.avisHotel = state.avisHotel.filter((av) => av.id_avis !== id),
+		removeAvisGlobal:(state, id) => state.avis = state.avis.filter((av) => av.id_avis !== id)
 	}
 }

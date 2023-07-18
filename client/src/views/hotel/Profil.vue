@@ -148,7 +148,7 @@
                       class="text-white mt-3"
                       style="background-color:orange;"
                       >
-                        Close
+                        Fermer
                       </v-btn>
                   </div>
                 </v-card-actions>
@@ -160,7 +160,6 @@
       <h2 v-if="countReservation==0" class="text-center mb-5">Aucune reservation pour l'instant</h2>
       <v-table v-if="countReservation !== 0" class="mb-5">
         <thead>
-          <th>...</th>
           <th>Nom du client</th>
           <th>Contact client</th>
           <th>Debut de sejour</th>
@@ -171,7 +170,6 @@
         </thead>
         <tbody  class="text-center">
           <tr v-for="res in reservation">
-            <td><v-btn icon="mdi-delete" flat></v-btn></td>
             <td>{{ res.nom_user }}</td>
             <td>{{ res.contact_user }}</td>
             <td>{{ res.reserver_pour }}</td>

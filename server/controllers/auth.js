@@ -14,7 +14,28 @@ const checkAuth = (req, res) => {
 			authModel.getHotelEmail(email, async (err, data) => {
 				if(err) return res.send(err)
 				if(!data[0] || data[0].length == 0){
-					return res.send("L'email ou le mot de passe invalide.")
+					authModel.getAdminEmail(email, async (err, output) => {
+						if(err) return res.send(err)
+						if(!output[0] || output[0].length == 0){
+							return res.send("L'email ou le mot de passe invalide.")
+						}else{
+							const validPass = await bcrypt.compare(password, output[0].mdp_admin)
+							if(validPass){
+								output[0].mdp_admin = null;
+								const token = jwt.sign({ result: output }, process.env.SECRET_KEY, {
+									expiresIn: "1h"
+								})
+								return res.json({
+									status: 1,
+									token: token,
+									user: output[0],
+									role: "admin"
+								})
+							}else{
+								return res.send("Email ou mot de passe invalide.")
+							}
+						}
+					})
 				}else{
 					const validPass = await bcrypt.compare(password, data[0].mdp_hotel)
 					if(validPass){

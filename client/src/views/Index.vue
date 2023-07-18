@@ -62,7 +62,13 @@ export default defineComponent({
   },
   methods: {
     ...mapActions({
-      LogOut: 'LogOut'
+      LogOut: 'LogOut',
+      outRoom: 'room/LogOut',
+      outPic: 'pic/LogOut',
+      outUser: 'user/LogOut',
+      outHotel: 'hotel/LogOut',
+      outReservation: 'reservation/LogOut',
+      outAvis: 'avis/LogOut',
     })
   },
   components: {
@@ -70,9 +76,21 @@ export default defineComponent({
   },
   created() {
     this.LogOut()
+    this.outRoom()
+    this.outPic()
+    this.outUser()
+    this.outHotel()
+    this.outReservation()
+    this.outAvis()
   },
   mounted() {
     this.LogOut()
+    this.outRoom()
+    this.outPic()
+    this.outUser()
+    this.outHotel()
+    this.outReservation()
+    this.outAvis()
   }
 });
 </script>

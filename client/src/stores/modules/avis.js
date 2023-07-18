@@ -67,8 +67,9 @@ export const avis = {
 			const response = await axios.delete(`http://localhost:8081/avis/${id}`)
 			if(state.avisHotel){
 				commit('removeAvis', id)
+			}else{
+				commit('removeAvisGlobal', id)
 			}
-			commit('removeAvisGlobal', id)
 		},
 		async LogOut({ state }){
 			state.avis = null

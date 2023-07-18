@@ -34,10 +34,6 @@ export const user = {
 		async deleteUser({ commit }, id){
 			const response = await axios.delete(`http://localhost:8081/user/${id}`)
 			commit('removeUser', id)
-		},
-		async LogOut({ state }){
-			state.users = null
-			state.singleUser = null
 		}
 	},
 	mutations: {

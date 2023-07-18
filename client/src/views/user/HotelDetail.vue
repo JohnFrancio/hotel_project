@@ -88,28 +88,28 @@
         </v-carousel-item>
       </v-carousel>
       <h2 v-if="countPics == 0" class="mt-12 text-center">L'hotel n'a aucune photo a montrer</h2>
-      <v-row class="ms-sm-2 px-3 mt-3 mb-3">
+      <v-row v-if="hotel !== null" class="ms-sm-2 px-3 mt-3 mb-3">
         <v-col cols="12" sm="6">
           <v-card
             height="100%"
             max-width="100%"
           >
             <v-img
-              :src="`data:image/png;base64,${hotel[0]?.img_hotel}`"
+              :src="`data:image/png;base64,${hotel.img_hotel}`"
               height="251px"
               cover
             ></v-img>
             <v-card-title>
-              {{hotel[0]?.nom_hotel}}
+              {{hotel.nom_hotel}}
             </v-card-title>
 
             <v-card-subtitle>
-              Adresse: {{hotel[0]?.adresse_hotel}} <br>
-              Contact: {{hotel[0]?.contact_hotel}} <br>
-              Email: {{hotel[0]?.email_hotel}} <br>
+              Adresse: {{hotel.adresse_hotel}} <br>
+              Contact: {{hotel.contact_hotel}} <br>
+              Email: {{hotel.email_hotel}} <br>
             </v-card-subtitle>
             <v-card-text>
-              {{hotel[0]?.description}}
+              {{hotel.description}}
             </v-card-text>
           </v-card>
         </v-col>
@@ -355,27 +355,25 @@ export default {
       this.dialog=true
     },
     async getSingleHotel(id){
-      const test = await this.getHotelById(id)
-      for(let dat of test){
-        const myArray = dat.adresse_hotel.split(" ");
-        const entry = myArray.join('+')
-        try{
-          const response_latlon = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${entry}`)
-          const result = response_latlon.data
-          if(result.length > 0){
-            for(let res of result){
-            this.lat = res.lat
-            this.log = res.lon
-            break
-          }
-            this.center = [this.lat, this.log]
-          }else{
-            this.seeAdress = !this.seeAdress
-          }
-          this.seeError = false
-        }catch(err){
-          this.seeError = true
+      await this.getHotelById(id)
+      const myArray = this.hotel.adresse_hotel.split(" ");
+      const entry = myArray.join('+')
+      try{
+        const response_latlon = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${entry}`)
+        const result = response_latlon.data
+        if(result.length > 0){
+          for(let res of result){
+          this.lat = res.lat
+          this.log = res.lon
+          break
         }
+          this.center = [this.lat, this.log]
+        }else{
+          this.seeAdress = !this.seeAdress
+        }
+        this.seeError = false
+      }catch(err){
+        this.seeError = true
       }
     },
     async addNewAvis(){
@@ -435,10 +433,10 @@ export default {
     }
   },
   created(){
+    this.getHotelById(this.$route.params.id)
     this.getRooms(this.$route.params.id)
     this.getSingleHotel(this.$route.params.id)
     this.getPics(this.$route.params.id)
-    this.getHotelById(this.$route.params.id)
     this.getAvisHotel(this.$route.params.id)
   }
 };

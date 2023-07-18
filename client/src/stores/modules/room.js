@@ -131,8 +131,9 @@ export const room = {
 			const response = await axios.delete(`http://localhost:8081/room/${id}`)
 			if(state.rooms){
 				commit('removeRoom', id)
+			}else{
+				commit('removeRoomGlobal', id)
 			}
-			commit('removeRoomGlobal', id)
 		},
 		async LogOut({ state }){
 			state.rooms = null

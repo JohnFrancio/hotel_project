@@ -65,7 +65,6 @@ export default defineComponent({
       LogOut: 'LogOut',
       outRoom: 'room/LogOut',
       outPic: 'pic/LogOut',
-      outUser: 'user/LogOut',
       outHotel: 'hotel/LogOut',
       outReservation: 'reservation/LogOut',
       outAvis: 'avis/LogOut',
@@ -78,7 +77,6 @@ export default defineComponent({
     this.LogOut()
     this.outRoom()
     this.outPic()
-    this.outUser()
     this.outHotel()
     this.outReservation()
     this.outAvis()
@@ -87,7 +85,6 @@ export default defineComponent({
     this.LogOut()
     this.outRoom()
     this.outPic()
-    this.outUser()
     this.outHotel()
     this.outReservation()
     this.outAvis()

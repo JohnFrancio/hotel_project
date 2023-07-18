@@ -14,6 +14,7 @@ import AdminAvis from '../views/admin/Avis.vue'
 import AdminChambre from '../views/admin/Chambre.vue'
 import AdminReservation from '../views/admin/Reservation.vue'
 import AdminImage from '../views/admin/Image.vue'
+import NotFound from '../views/NotFound.vue'
 import { store } from '../stores/store'
 
 const routes = [
@@ -98,6 +99,11 @@ const routes = [
     name: 'AdminImage',
     component: AdminImage,
     meta: {requiresAuth: true},
+  },
+  {
+    path: "/:notFound",
+    name: 'NotFound',
+    component: NotFound,
   },
 ]
 

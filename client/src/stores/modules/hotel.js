@@ -23,12 +23,10 @@ export const hotel = {
 		async getHotels({ commit }){
 			const response = await axios.get(`http://localhost:8081/hotel`)
 			commit('setHotels', response.data)
-			return response.data
 		},
 		async getHotelById({ commit }, id){
 			const response = await axios.get(`http://localhost:8081/hotel/${id}`)
-			commit('setSingleHotel', response.data)
-			return response.data
+			commit('setSingleHotel', response.data[0])
 		},
 		async deleteHotel({ commit }, id){
 			const response = await axios.delete(`http://localhost:8081/hotel/${id}`)

@@ -260,7 +260,7 @@ export default {
   methods:{
     ...mapActions({
       getHotels:'hotel/getHotels',
-      getAllRooms: 'room/getAllRooms',
+      getAllRooms: 'room/getAllRoomsFromBack',
       getRoomReserve: 'room/getRoomReserve'
     }),
     async getCham(id){

@@ -48,8 +48,10 @@ export const pic = {
 			const response = await axios.delete(`http://localhost:8081/pic/${id}`)
 			if(state.pics){
 				commit('removePic', id)
+			}else{
+				commit('removePicGlobal', id)
 			}
-			commit('removePicGlobal', id)
+			
 		},
 		async LogOut({ state }){
 			state.pics = null

@@ -92,7 +92,6 @@ export const reservation = {
 		},
 		async getAllReservationUser({ commit }, credentials){
 			const response = await axios.get(`http://localhost:8081/reservation/user/${credentials}`)
-			console.log(response)
 			for(let i in response.data){
 		        let date = new Date(response.data[i].reserver_pour).toLocaleDateString(
 		            'fr-FR',

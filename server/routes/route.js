@@ -4,6 +4,7 @@ const authController = require('../controllers/auth');
 const roomController = require('../controllers/room');
 const albumController = require('../controllers/albumHotel');
 const avisController = require('../controllers/avis');
+const paiementController = require('../controllers/paiement');
 const reservationController = require('../controllers/reservation');
 
 const express = require("express");
@@ -58,5 +59,10 @@ router.get('/avis', avisController.getAvis);
 router.get('/avis/:id', avisController.getAvisHotelId);
 router.post('/avis', avisController.insertAvis);
 router.delete('/avis/:id', avisController.deleteAvis);
+
+//routes for paiement
+router.get('/paiement/info/:id', paiementController.getInfoPaiement)
+router.post('/paiement/:id', paiementController.insertPaiement)
+router.get('/paiement/:id', paiementController.updatePaiement)
 
 module.exports = router;

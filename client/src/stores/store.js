@@ -6,6 +6,7 @@ import { pic } from './modules/pic'
 import { reservation } from './modules/reservation'
 import { avis } from './modules/avis'
 import { user } from './modules/user'
+import { paiement } from './modules/paiement'
 import axios from 'axios'
 
 
@@ -20,7 +21,8 @@ export const store = createStore({
     pic,
     reservation,
     avis,
-    user
+    user,
+    paiement
   },
   state: {
     token: null,

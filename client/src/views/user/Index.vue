@@ -70,7 +70,7 @@
                 <v-btn @click=" reserver(singleRoom[0].id_chambre)" class="text-white mt-3 mx-5" style="background-color:green;">
                   Reserver
                 </v-btn>
-                <v-btn @click="dialog = false" class="text-white mt-3" style="background-color:orange;">
+                <v-btn @click="dialog = false" class="text-white mt-3" style="background-color:orange;">  
                   Fermer
                 </v-btn>
               </div>
@@ -78,67 +78,14 @@
           </v-col>
         </v-row>
       </el-dialog>
-      <v-row justify="end">
-        <v-col cols="12" sm="4">
-          <v-text-field outlined append-icon="mdi-home-search" label="Chercher un hotel/adresse" class="mt-10 me-16" v-model="search"></v-text-field>
-        </v-col>
-      </v-row>
-      <h2 class="ms-10">Nos hotels:</h2>
-      <v-row align="center" justify="center">
-          <v-col v-for="hotel in filterHotel" cols="12" sm="3">
-            <div >
-              <v-card
-                class="mx-5 mx-sm-2 mt-5"
-                max-width="400"
-              >
-                <v-img
-                  :src="'data:image/png;base64,'+hotel.img_hotel"
-                  height="200px"
-                  cover
-                ></v-img>
-                <v-card-title>
-                  {{hotel.nom_hotel}}
-                </v-card-title>
-
-                <v-card-subtitle>
-                  Adresse: {{hotel.adresse_hotel}} <br>
-                  Contact: {{hotel.contact_hotel}} <br>
-                  Email: {{hotel.email_hotel}} <br>
-                </v-card-subtitle>
-
-                <v-card-actions>
-                  <v-btn
-                    @click="this.$router.push('/user/hotel/detail/'+hotel.id_hotel)"
-                    color="orange"
-                    variant="text"
-                  >
-                    Voir Details
-                  </v-btn>
-
-                  <v-spacer></v-spacer>
-
-                  <v-btn
-                    :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-                    @click="show = !show"
-                  ></v-btn>
-                </v-card-actions>
-
-                <v-expand-transition>
-                  <div v-show="show">
-                    <v-divider></v-divider>
-
-                    <v-card-text>
-                      {{hotel.description}}
-                    </v-card-text>
-                  </div>
-                </v-expand-transition>
-              </v-card>
-            </div>
-          </v-col>
-        </v-row>
-      <h2 class="ms-10 mt-10">Nos chambres:</h2>
+      <div class="d-sm-flex mt-15">
+        <v-slider label="Nombre de personne:" style="width:100%;" v-model="persRange" :min="0" :max="4" :step="1" thumb-label></v-slider>
+        <v-slider label="Nombre de lit 1place:" style="width:100%;" v-model="unlitRange" :min="-1" :max="4" :step="1" thumb-label></v-slider>
+        <v-slider label="Nombre de lit 2places:" style="width:100%;" v-model="deuxlitRange" :min="-1" :max="4" :step="1" thumb-label></v-slider>
+      </div>
+      <h2 class="ms-10">Nos chambres: </h2>
       <v-row align="center" justify="center" class="ms-sm-3">
-        <v-col v-for="(cham ,index) in rooms"  cols="12" sm="3">
+        <v-col v-for="(cham ,index) in filterRoom"  cols="12" sm="3">
           <v-card
             class="mx-auto mt-5"
             max-width="344"
@@ -210,6 +157,80 @@
           </v-card>
         </v-col>
       </v-row>
+      <div class="text-center mt-3" v-if="filterRoom.length == 0">
+        <h2 class="mt-3 text-grey">Aucune chambre correspondante au recherche</h2>
+      </div>
+      <v-row justify="end">
+        <v-col cols="12" sm="4">
+          <v-text-field variant="outlined" append-icon="mdi-home-search" label="Chercher un hotel/adresse" class="me-16" v-model="search"></v-text-field>
+        </v-col>
+      </v-row>
+      <h2 class="ms-10">Nos hotels:</h2>
+      <v-row align="center" justify="center">
+          <v-col v-for="hotel in filterHotel" cols="12" sm="3">
+            <div >
+              <v-card
+                class="mx-5 mx-sm-2 mt-5"
+                max-width="400"
+              >
+                <v-img
+                  :src="'data:image/png;base64,'+hotel.img_hotel"
+                  height="200px"
+                  cover
+                ></v-img>
+                <v-card-title>
+                  {{hotel.nom_hotel}}
+                </v-card-title>
+
+                <v-card-subtitle>
+                  Adresse: {{hotel.adresse_hotel}} <br>
+                  Contact: {{hotel.contact_hotel}} <br>
+                  Email: {{hotel.email_hotel}} <br>
+                </v-card-subtitle>
+
+                <v-card-actions>
+                  <v-btn
+                    @click="this.$router.push('/user/hotel/detail/'+hotel.id_hotel)"
+                    color="orange"
+                    variant="text"
+                  >
+                    Voir Details
+                  </v-btn>
+
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+                    @click="show = !show"
+                  ></v-btn>
+                </v-card-actions>
+
+                <v-expand-transition>
+                  <div v-show="show">
+                    <v-divider></v-divider>
+
+                    <v-card-text>
+                      {{hotel.description}}
+                    </v-card-text>
+                  </div>
+                </v-expand-transition>
+              </v-card>
+            </div>
+            <div class="text-center mt-3" v-if="filterHotel.length == 0">
+              <h2 class="mt-3 text-grey">Aucun hotel correspondant au recherche</h2>
+            </div>
+          </v-col>
+        </v-row>
+        <div class="text-center">
+          <h2 v-if="filterHotel.length == 0">Aucun hotel correspondant au recherche</h2>
+        </div>
+      <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="success"
+        >
+          Reservation effectuer avec <strong>succes</strong>.
+        </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -239,14 +260,21 @@ export default {
         }
       })
     },
-    computeRange:{
-      get(){
-        return this.range
-      }
+    filterRoom(){
+      return this.rooms?.filter((room) => {
+        if(room.nbr_pers.includes(this.persRange) || room.nbr_lit1.includes(this.unlitRange) ||
+          room.nbr_lit2.includes(this.deuxlitRange)){
+          return true
+        }
+      })
     }
   },
   data(){
     return{
+      persRange: 2,
+      unlitRange: -1,
+      deuxlitRange: -1,
+      success: false,
       error:false,
       dateValue: null,
       search:"",
@@ -296,6 +324,7 @@ export default {
         if(response.data.fieldCount == 0){
           this.dialog = false
           this.dateValue = null
+          this.success = true
         }
       }
     }

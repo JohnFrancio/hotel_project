@@ -140,7 +140,7 @@
             <v-dialog v-model="dialog2" width="50%">
               <v-card class="my-5">
                 <v-form @submit.prevent="paiement" class="px-5 py-5" ref="form2"> 
-                  <v-text-field v-model="res.prix" label="Prix" outlined dense color="blue" autocomplete="false" readonly></v-text-field>
+                  <v-text-field v-model="res.prix" label="Prix" outlined dense color="blue" autocomplete="false"></v-text-field>
                   <v-text-field v-model="profils.contact_user" label="Contact" outlined dense color="blue" autocomplete="false" readonly></v-text-field>
                   <v-card-actions>
                     <div class="text-center">
@@ -196,6 +196,34 @@
             </v-card-text>
           </v-card>
         </v-dialog>
+        <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="successPaiement"
+        >
+          Votre transaction a été <strong>envoyer</strong>.
+        </v-snackbar>
+        <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="success"
+        >
+          Votre transaction a été un <strong>succes</strong>.
+        </v-snackbar>
+        <v-snackbar
+          :timeout="3000"
+          color="red"
+          v-model="failed"
+        >
+          <strong>Erreur</strong> lors de votre transaction.
+        </v-snackbar>
+        <v-snackbar
+          :timeout="3000"
+          color="info"
+          v-model="pending"
+        >
+          Votre transaction est en <strong>attente</strong>.
+        </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -226,6 +254,10 @@ export default {
   },
   data() {
     return {
+      success: false,
+      pending: false,
+      successPaiement: false,
+      failed: false,
       dialog: false,
       dialog2: false,
       dialog3:false,
@@ -260,8 +292,15 @@ export default {
     },
     async infoRef(id){
       const response = await this.updateRef(id)
-      if(response == 0){
-        this.dialog3 = true
+      this.dialog3 = true
+      if(response == "completed"){
+        this.success = true
+      }
+      if(response == "failed"){
+        this.failed = true
+      }
+      if(response == "pending"){
+        this.pending = true
       }
     },
     async paiement(prix, contact, id){
@@ -273,6 +312,7 @@ export default {
       const response = await this.addPay(credentials)
       if(response == 0){
         this.dialog2 = false
+        this.successPaiement = true
       }
       this.getAllReservationUser(this.id)
     },

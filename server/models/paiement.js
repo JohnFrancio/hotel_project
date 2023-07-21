@@ -1,7 +1,7 @@
 const db = require('../connexion/db')
 
 const getPaiement = (id, result) => {
-    db.query(`SELECT * FROM paiement WHERE id_reservation = ?`, [id], (err, results) => {
+    db.query(`SELECT serverCorrelationId FROM paiement WHERE id_reservation = ?`, [id], (err, results) => {
             if (err) {
                 return result(err);
             }

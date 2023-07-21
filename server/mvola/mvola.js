@@ -1,13 +1,14 @@
 const axios = require('axios')
 const querystring = require('querystring')
-const { v4: uuidv4 } = require('uuid')
+const { v4 } = require('uuid')
 const { Buffer } = require('buffer')
 
 class MvolaApiClient {
   constructor(consumerKey, consumerSecret) {
     this.accessToken = null;
     this.baseURL = 'https://devapi.mvola.mg';
-    this.XCorrelationID = uuidv4();
+    this.XCorrelationID = v4();
+    this.transactionRef = v4();
 
     // encoder le consumerKey et le consumerSecret en base64 pour l'authentification header
     this.authHeader = 'Basic ' + Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
@@ -35,9 +36,9 @@ class MvolaApiClient {
   }
 
   //pour faire une transaction
-  async makeMerchantPayTransaction(amount, description, partnerTransid, requestDate, originalTxRef, customerNumber, MerchantNumber, companyName) {
+  async makeMerchantPayTransaction(amount, description, customerNumber, MerchantNumber) {
     if (!this.accessToken) {
-      throw new Error('Access token not available. Call getToken() first.');
+      throw new Error('L\'accessToken n\'est pas valide. Appel le getToken() en premier.');
     }
 
     const url = `${this.baseURL}/mvola/mm/transactions/type/merchantpay/1.0.0/`;
@@ -45,9 +46,9 @@ class MvolaApiClient {
     const headers = {
       'Version': '1.0',
       'X-CorrelationID': this.XCorrelationID,
-      'UserLanguage': 'MG',
+      'UserLanguage': 'FR',
       'UserAccountIdentifier': `msisdn;${MerchantNumber}`,
-      'partnerName': companyName,
+      'partnerName': 'TestMvola',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.accessToken}`,
       'Cache-Control': 'no-cache',
@@ -57,9 +58,7 @@ class MvolaApiClient {
       amount: amount.toString(),
       currency: "Ar",
       descriptionText: description,
-      requestingOrganisationTransactionReference: partnerTransid,
-      requestDate: requestDate,
-      originalTransactionReference: originalTxRef,
+      requestDate: new Date().toISOString(),
       debitParty: [
         { "key": "msisdn", "value": customerNumber }
       ],
@@ -67,10 +66,12 @@ class MvolaApiClient {
         { "key": "msisdn", "value": MerchantNumber }
       ],
       metadata: [
-        { "key": "partnerName", "value": companyName },
+        { "key": "partnerName", "value": "TestMvola" },
         { "key": "fc", "value": "USD" },
         { "key": "amountFc", "value": "1" }
-      ]
+      ],
+      originalTransactionReference: this.transactionRef,
+      requestingOrganisationTransactionReference: this.transactionRef,
     };
 
     try {
@@ -84,7 +85,7 @@ class MvolaApiClient {
   // pour recuperer les donnees d'un transaction a partir du transID (objetReference)
   async getMerchantPayTransaction(transID, merchantNumber, companyName) {
     if (!this.accessToken) {
-      throw new Error('Access token not available. Call getToken() first.');
+      throw new Error('L\'accessToken n\'est pas valide. Appel le getToken() en premier.');
     }
 
     const url = `${this.baseURL}/mvola/mm/transactions/type/merchantpay/1.0.0/${transID}`;
@@ -108,9 +109,9 @@ class MvolaApiClient {
   }
 
   // pour recuperer le status d'un transaction a partir du serverCorrelationId
-  async getMerchantPayTransactionStatus(serverCorrelationId, merchantNumber, companyName) {
+  async getMerchantPayTransactionStatus(serverCorrelationId, merchantNumber) {
     if (!this.accessToken) {
-      throw new Error('Access token not available. Call getToken() first.');
+      throw new Error('L\'accessToken n\'est pas valide. Appel le getToken() en premier.');
     }
 
     const url = `${this.baseURL}/mvola/mm/transactions/type/merchantpay/1.0.0/status/${serverCorrelationId}`;
@@ -120,9 +121,10 @@ class MvolaApiClient {
       'X-CorrelationID': this.XCorrelationID,
       'UserLanguage': 'FR',
       'UserAccountIdentifier': `msisdn;${merchantNumber}`,
-      'partnerName': companyName,
+      'partnerName': 'TestMvola',
       'Authorization': `Bearer ${this.accessToken}`,
       'Cache-Control': 'no-cache',
+      'Content-Type' : 'application/json'
     };
 
     try {

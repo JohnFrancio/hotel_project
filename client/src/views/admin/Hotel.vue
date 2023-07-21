@@ -62,31 +62,31 @@
 	        </v-row>
 	        <v-dialog v-model="dialog" width="50%">
 	          <v-card>
-	          	<v-card-title class="text-center">Detail sur l'hotel {{ this.hotelById[0].nom_hotel }}</v-card-title>
+	          	<v-card-title class="text-center">Detail sur l'hotel {{ hotelById.nom_hotel }}</v-card-title>
 	            <v-card-text>
 	              <v-form @submit.prevent="editProfil" class="px-5" ref="form"> 
 	                <v-row>
 	                  <v-col col="12" sm="6">
-	                    <v-text-field v-model="nom" label="Nom d'hotel" outlined dense color="blue" autocomplete="false"></v-text-field>
+	                    <v-text-field readonly v-model="nom" label="Nom d'hotel" outlined dense color="blue" autocomplete="false"></v-text-field>
 	                  </v-col>
 	                  <v-col col="12" sm="6">
-	                    <v-text-field v-model="adresse" label="Adresse(entrer le nom de la ville)" outlined dense color="blue" autocomplete="false"></v-text-field>
+	                    <v-text-field readonly v-model="adresse" label="Adresse(entrer le nom de la ville)" outlined dense color="blue" autocomplete="false"></v-text-field>
 	                  </v-col>
 	                </v-row>
 	                <v-row>
 	                  <v-col col="12" sm="6">
-	                    <v-text-field v-model="contact" label="Numero de telephone" outlined dense color="blue" autocomplete="false"></v-text-field>
+	                    <v-text-field readonly v-model="contact" label="Numero de telephone" outlined dense color="blue" autocomplete="false"></v-text-field>
 	                  </v-col>
 	                  <v-col col="12" sm="6">
-	                    <v-text-field v-model="nif" label="Numero d'identification fiscale(NIF)" outlined dense color="blue" autocomplete="false"></v-text-field>
+	                    <v-text-field readonly v-model="nif" label="Numero d'identification fiscale(NIF)" outlined dense color="blue" autocomplete="false"></v-text-field>
 	                  </v-col>
 	                </v-row>
-	                <v-textarea
+	                <v-textarea readonly
 	                  v-model="description"
 	                  label="Description"
 	                  append-icon="mdi-comment"
 	                ></v-textarea>
-	                <v-text-field v-model="email" label="Adresse email" outlined dense color="blue" autocomplete="false"></v-text-field>
+	                <v-text-field readonly v-model="email" label="Adresse email" outlined dense color="blue" autocomplete="false"></v-text-field>
 	                <v-card-actions>
 	                  <div class="text-center">
 	                     <v-btn
@@ -150,12 +150,12 @@ export default{
 	    async detail(id){
 	    	await this.getHotelById(id)	
 	    	this.dialog = true
-	    	this.nom = this.hotelById[0].nom_hotel
-			this.adresse = this.hotelById[0].adresse_hotel
-			this.contact = this.hotelById[0].contact_hotel
-			this.description = this.hotelById[0].description
-			this.nif = this.hotelById[0].nif_hotel
-			this.email = this.hotelById[0].email_hotel
+	    	this.nom = this.hotelById.nom_hotel
+			this.adresse = this.hotelById.adresse_hotel
+			this.contact = this.hotelById.contact_hotel
+			this.description = this.hotelById.description
+			this.nif = this.hotelById.nif_hotel
+			this.email = this.hotelById.email_hotel
 	    }
 	},
     created(){

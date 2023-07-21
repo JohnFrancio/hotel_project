@@ -147,10 +147,10 @@
         <v-card>
           <v-card-text>
             <div align="center" justify="center" v-if="countAvis == 0">
-              <h3>Auncun avis sur {{ hotel[0].nom_hotel }}</h3>
+              <h3>Auncun avis sur {{ hotel.nom_hotel }}</h3>
             </div>
             <div v-if="countAvis !== 0">
-              <h3 class="text-center my-3"> Les avis sur {{ hotel[0].nom_hotel }}</h3>
+              <h3 class="text-center my-3"> Les avis sur {{ hotel.nom_hotel }}</h3>
               <v-divider></v-divider>
               <v-row class="mt-3">
                 <v-col cols="12" sm="6" v-for="avis in avisHotel">
@@ -291,6 +291,13 @@
           </v-form>
         </v-col>
       </v-row>
+      <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="success"
+        >
+          Reservation effectuer avec <strong>succes</strong>.
+        </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -325,6 +332,7 @@ export default {
   },
   data() {
     return {
+      success: false,
       dialog2:false,
       center: [47.413220, -1.219482],
       seeAdress: true,
@@ -428,6 +436,7 @@ export default {
         if(response.data.fieldCount == 0){
           this.dialog = false
           this.dateValue = null
+          this.success = true
         }
       }
     }

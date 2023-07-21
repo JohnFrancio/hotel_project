@@ -24,7 +24,8 @@ export const paiement = {
 			const response = await axios.get(`http://localhost:8081/paiement/${id}`)
 			const datas = await axios.get(`http://localhost:8081/paiement/info/${id}`)
 			commit('setPaiement', datas.data)
-			return response.data.fieldCount
+			console.log(response)
+			return response.data
 		},
 		async addPaiement({ commit }, credentials){
 			const response = await axios.post(`http://localhost:8081/paiement/${credentials.id}`, {

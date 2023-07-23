@@ -389,7 +389,7 @@ export default {
       if(isValide.valid){
         const credentials = {
           "id_user": this.getProfil.id_user,
-          "id_hotel": this.hotel[0].id_hotel,
+          "id_hotel": this.hotel.id_hotel,
           "avis": this.avis,
         }
         const another = await this.addAvis(credentials)

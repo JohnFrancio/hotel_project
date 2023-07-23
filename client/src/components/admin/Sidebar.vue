@@ -19,6 +19,7 @@
       <v-list-item link to="hotel" prepend-icon="mdi-home-city" title="Hotel"></v-list-item>
       <v-list-item link to="client" prepend-icon="mdi-account-group-outline" title="Client"></v-list-item>
       <v-list-item link to="reservation" prepend-icon="mdi-book" title="Reservation"></v-list-item>
+      <v-list-item link to="paiement" prepend-icon="mdi-bitcoin" title="Paiement"></v-list-item>
       <v-list-item link to="avis" prepend-icon="mdi-comment-processing-outline" title="Avis"></v-list-item>
       <v-list-item link to="chambre" prepend-icon="mdi-bed" title="Chambre"></v-list-item>
       <v-list-item link to="image" prepend-icon="mdi-image" title="Photo"></v-list-item>

@@ -14,6 +14,7 @@ import AdminAvis from '../views/admin/Avis.vue'
 import AdminChambre from '../views/admin/Chambre.vue'
 import AdminReservation from '../views/admin/Reservation.vue'
 import AdminImage from '../views/admin/Image.vue'
+import AdminPaiement from '../views/admin/Paiement.vue'
 import NotFound from '../views/NotFound.vue'
 import { store } from '../stores/store'
 
@@ -98,6 +99,11 @@ const routes = [
     path: '/admin/image',
     name: 'AdminImage',
     component: AdminImage,
+    meta: {requiresAuth: true},
+  },{
+    path: '/admin/paiement',
+    name: 'AdminPaiement',
+    component: AdminPaiement,
     meta: {requiresAuth: true},
   },
   {

@@ -45,7 +45,7 @@
               <p class="text-start my-5 text-subtitle-1 mx-10">Reference du Paiement: {{ onePaiement.objectReference }}</p>
               <p class="text-start my-5 text-subtitle-1 mx-10">ServerCorrelationId du paiement: {{ onePaiement.serverCorrelationId }}</p>
               <div class="text-center">
-                <v-btn @click="" class="text-white mt-3 mx-5" style="background-color:green;">
+                <v-btn @click="printPDF()" class="text-white mt-3 mx-5" style="background-color:green;">
                   Facture
                 </v-btn>
                 <v-btn @click="dialog3 = false" class="text-white mt-3" style="background-color:orange;">
@@ -114,7 +114,7 @@
       </v-dialog>
 
       <!-- //reservation -->
-      <v-table v-if="countReservation !== 0" class="mb-5">
+      <v-table v-if="countReservation !== 0" class="mb-5 mx-3">
         <thead>
           <th>...</th>
           <th>Nom de l'hotel</th>
@@ -134,27 +134,33 @@
             <td>{{ res.nbr_jour }}</td>
             <td>{{ res.date_reservation }}</td>
             <td>{{ res.id_chambre }}</td>
-            <v-btn @click="dialog2 = true" v-if="res.paye == 'non'" class="mt-1 text-white" color="orange-lighten-2">Payer</v-btn>
+            <v-btn @click="dialog2 = true" v-if="res.paye == 'non'" class="mt-1 text-green-darken-4 font-weight-bold" color="yellow"><v-img width="50" src="../../assets/Mvola.png"></v-img>Payer</v-btn>
             <v-btn v-if="res.paye !== 'non'" class="mt-2 text-white" color="green-lighten-2" variant="text">Deja Payé</v-btn>
             <!-- dialog pour effectuer un paiement -->
             <v-dialog v-model="dialog2" width="50%">
-              <v-card class="my-5">
-                <v-form @submit.prevent="paiement" class="px-5 py-5" ref="form2"> 
-                  <v-text-field v-model="res.prix" label="Prix" outlined dense color="blue" autocomplete="false"></v-text-field>
-                  <v-text-field v-model="profils.contact_user" label="Contact" outlined dense color="blue" autocomplete="false" readonly></v-text-field>
+              <v-card class="my-5 rounded-5" color="#FFDE00">
+                <v-card-title class="text-center my-3" justify="center">
+                  <span class="text-h4 font-weight-bold text-green-darken-4">Payer avec</span>
+                  <v-img class="mx-auto" width="150" src="../../assets/CEdwx6OVEAAfGzN.png"></v-img>
+                </v-card-title>
+                <v-form @submit.prevent="paiement" class="text-green-darken-4 px-16 py-5" ref="form2"> 
+                  <v-text-field v-model="res.prix" label="Prix" color="green-darken-4" autocomplete="false"></v-text-field>
+                  <v-text-field v-model="profils.contact_user" label="Contact" outlined dense color="green-darken-4" autocomplete="false" readonly></v-text-field>
                   <v-card-actions>
-                    <div class="text-center">
+                    <div class="mx-auto">
                         <v-btn
                           @click="paiement(res.prix, profils.contact_user, res.id_reservation)"
-                          class="text-white mt-3 mx-5"
-                          color="blue-lighten-2"
+                          class="text-white mt-3 me-5"
+                          color="blue-darken-4"
+                          variant="outlined"
                           >
                           Effectuer
                         </v-btn>
                        <v-btn
                         @click="dialog2 = false"
                         class="text-white mt-3"
-                        color="orange-lighten-2"
+                        color="red-darken-4"
+                        variant="outlined"
                         >
                           Fermer
                         </v-btn>
@@ -224,17 +230,23 @@
         >
           Votre transaction est en <strong>attente</strong>.
         </v-snackbar>
+        <v-snackbar
+          :timeout="3000"
+          color="warning"
+          v-model="warning"
+        >
+          Verifier votre <strong>connexion</strong> et <strong>ressayer</strong> ulterieurement.
+        </v-snackbar>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import "leaflet/dist/leaflet.css";
-import leaflet from 'leaflet'
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import HeaderUser from '@/components/User/Header'
-import { LMap, LTileLayer,  LMarker } from "@vue-leaflet/vue-leaflet";
 
 export default {
   name: 'UserProfil',
@@ -247,14 +259,12 @@ export default {
     })
   },
   components: {
-    LMap,
-    LTileLayer,
-    LMarker,
     HeaderUser
   },
   data() {
     return {
       success: false,
+      warning: false,
       pending: false,
       successPaiement: false,
       failed: false,
@@ -287,20 +297,77 @@ export default {
     }
   },
   methods:{
+    async printPDF(){
+      require('jspdf-autotable');
+
+      var doc = new jsPDF();
+
+      // Company Information
+      doc.setFontSize(18);
+      doc.text(this.onePaiement.nom_hotel, 14, 15);
+      doc.setFontSize(11);
+      doc.text(this.onePaiement.adresse_hotel, 14, 20);
+      doc.text('Lot 123', 14, 25);
+      doc.text('Email: '+this.onePaiement.email_hotel, 14, 30);
+      doc.text('Phone: '+this.onePaiement.contact_hotel, 14, 35);
+
+      // Invoice Information
+      doc.setFontSize(18);
+      doc.text('Facture', 140, 15);
+      doc.setFontSize(11);
+      doc.text('Facture Numero: '+this.onePaiement.id_paiement, 140, 20);
+      doc.text('Date: ' + new Date().toLocaleDateString(), 140, 25);
+      doc.text('Reference de paiement: '+this.onePaiement.objectReference, 120, 65)
+      doc.text('ServerCorrelationId: '+this.onePaiement.serverCorrelationId, 120, 70)
+
+      // Customer Information
+      doc.setFontSize(18);
+      doc.setFontSize(11);
+      doc.text('Facture Pour:'+this.onePaiement.nom_user, 14, 65);
+      doc.text('Email: '+this.onePaiement.email_user, 14, 70);
+      doc.text('Phone: '+this.onePaiement.contact_user, 14, 75);
+
+      // Invoice Table
+      doc.autoTable({
+      head: [['#', 'Chambre', 'Nombre personne', 'Nombre de lit 1', 'Nombre de lit 2', 'Nombre de douche', 'Nombre de tele', 'Prix', 'Debut du sejour', 'Fin du sejour']],
+      body: [
+      [this.onePaiement.id_reservation, this.onePaiement.id_chambre , this.onePaiement.nbr_pers, this.onePaiement.nbr_lit1, this.onePaiement.nbr_lit2, this.onePaiement.nbr_douche, this.onePaiement.nbr_tele, this.onePaiement.prix, new Date(this.onePaiement.reserver_pour).toLocaleDateString(), new Date(this.onePaiement.nbr_jour).toLocaleDateString()],
+      ],
+      startY: 85
+      });
+
+      // Invoice Total
+      doc.setFontSize(14);
+      doc.text('Subtotal: '+this.onePaiement.prix+'Ar', 140, 130);
+      doc.text('Total: '+this.onePaiement.prix+'Ar', 140, 135);
+
+      // Terms and Conditions
+      doc.setFontSize(11);
+      doc.text('Termes et Conditions', 14, 150);
+      doc.text('1. Confimer votre reservation en nous contactant 3j avant votre arriver', 14, 155);
+      doc.text('2. La reservation est annulee apres 12h de retard', 14, 160);
+      doc.text('3. Le serverCorrelationId c\'est pour reclamer votre reference de paiement', 14, 165);
+
+      doc.save(this.onePaiement.nom_user+'_facture.pdf');
+    },
     imgProfil(event){
       this.img = event.target.files[0]
     },
     async infoRef(id){
       const response = await this.updateRef(id)
-      this.dialog3 = true
       if(response == "completed"){
+        this.dialog3 = true
         this.success = true
       }
-      if(response == "failed"){
+      else if(response == "failed"){
+        this.dialog3 = true
         this.failed = true
       }
-      if(response == "pending"){
+      else if(response == "pending"){
+        this.dialog3 = true
         this.pending = true
+      } else{
+        this.warning = true
       }
     },
     async paiement(prix, contact, id){
@@ -313,6 +380,9 @@ export default {
       if(response == 0){
         this.dialog2 = false
         this.successPaiement = true
+      }else{
+        this.dialog2 = false
+        this.warning = true
       }
       this.getAllReservationUser(this.id)
     },
@@ -354,3 +424,32 @@ export default {
   }
 }
 </script>
+
+<style>
+  body {
+    margin: 0.2em;
+  }
+
+  #logo {
+    margin-top: 10px;
+    
+  }
+
+  .container {
+    margin-left: auto; 
+    margin-right: auto;
+  }
+
+  h4 {
+    font-color: #707070;
+    font-weight: 450;
+  }
+
+  th {
+    background-color: #EFEFEF;
+    table-border: black;
+    font-size: 14px;
+    font-weight: 600;
+    align-text: left;
+  }
+</style>

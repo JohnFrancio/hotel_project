@@ -37,6 +37,7 @@ const insertPaiement = async (req, res) => {
 	    }
 	}catch (error) {
 	    console.error('Error:', error);
+	    return res.send(error);
 	}
 }
 
@@ -68,6 +69,7 @@ const updatePaiement = async (req, res) => {
 		    })
 	}catch (error) {
 	    console.error('Error:', error);
+	    return res.send(error);
 	}
 }
 
@@ -80,8 +82,29 @@ const getInfoPaiement = (req, res) => {
     })
 }
 
+const getAllPaiement = (req, res) => {
+	paiementModel.getAllPaiement((err,results)=>{
+        if (err) {
+            return res.send(err.sqlMessage);
+        }
+        return res.json(results);
+    })
+}
+
+const deletePaiement = (req, res) => {
+    paiementModel.deletePaiement(req.params.id, (err, results) => {
+        if (err) {
+            return res.send(err.sqlMessage);
+        }
+        return res.json(results);
+    });
+};
+
+
 module.exports = {
+	getAllPaiement,
 	getInfoPaiement,
 	insertPaiement,
-	updatePaiement
+	updatePaiement,
+	deletePaiement
 }

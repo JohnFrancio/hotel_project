@@ -84,8 +84,8 @@
         <v-slider label="Nombre de lit 2places:" style="width:100%;" v-model="deuxlitRange" :min="-1" :max="4" :step="1" thumb-label></v-slider>
       </div>
       <h2 class="ms-10">Nos chambres: </h2>
-      <v-row align="center" justify="center" class="ms-sm-3">
-        <v-col v-for="(cham ,index) in filterRoom"  cols="12" sm="3">
+      <v-row align="center" justify="center" class="ms-sm-3" v-if="filterRoom">
+        <v-col v-if="filterRoom.length != 0" v-for="(cham ,index) in filterRoom" :key="index" cols="12" sm="3">
           <v-card
             class="mx-auto mt-5"
             max-width="344"
@@ -157,8 +157,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <div class="text-center mt-3" v-if="filterRoom.length == 0">
-        <h2 class="mt-3 text-grey">Aucune chambre correspondante au recherche</h2>
+      <div class="text-center mt-3" v-if="filterRoom">
+        <h2  v-if="filterRoom.length == 0" class="mt-3 text-grey">Aucune chambre correspondante au recherche</h2>
       </div>
       <v-row justify="end">
         <v-col cols="12" sm="4">
@@ -167,7 +167,7 @@
       </v-row>
       <h2 class="ms-10">Nos hotels:</h2>
       <v-row align="center" justify="center">
-          <v-col v-for="hotel in filterHotel" cols="12" sm="3">
+          <v-col v-for="hotel in filterHotel" class="mb-5" cols="12" sm="3">
             <div >
               <v-card
                 class="mx-5 mx-sm-2 mt-5"
@@ -221,7 +221,7 @@
             </div>
           </v-col>
         </v-row>
-        <div class="text-center">
+        <div class="text-center" v-if="filterHotel">
           <h2 v-if="filterHotel.length == 0">Aucun hotel correspondant au recherche</h2>
         </div>
       <v-snackbar
@@ -272,8 +272,8 @@ export default {
   data(){
     return{
       persRange: 2,
-      unlitRange: -1,
-      deuxlitRange: -1,
+      unlitRange: 0,
+      deuxlitRange: 0,
       success: false,
       error:false,
       dateValue: null,
@@ -329,9 +329,9 @@ export default {
       }
     }
   },
-  created(){
-    this.getHotels()
-    this.getAllRooms()
+  async created(){
+    await this.getAllRooms()
+    await this.getHotels()
   }
 
 }

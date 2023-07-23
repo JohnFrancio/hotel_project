@@ -64,5 +64,7 @@ router.delete('/avis/:id', avisController.deleteAvis);
 router.get('/paiement/info/:id', paiementController.getInfoPaiement)
 router.post('/paiement/:id', paiementController.insertPaiement)
 router.get('/paiement/:id', paiementController.updatePaiement)
+router.delete('/paiement/:id', paiementController.deletePaiement)
+router.get('/paiement', paiementController.getAllPaiement)
 
 module.exports = router;

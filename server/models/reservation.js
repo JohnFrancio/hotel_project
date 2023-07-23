@@ -29,7 +29,7 @@ const getReservation = (result) => {
 
 // get reservation by id
 const getReservationByUserid = (id, result) => {
-    db.query(`SELECT id_reservation, nom_hotel, chambre.prix, adresse_hotel, reserver_pour, nbr_jour, date_reservation, paye, chambre.id_chambre
+    db.query(`SELECT id_reservation,img_chambre, nom_hotel, chambre.prix, adresse_hotel, reserver_pour, nbr_jour, date_reservation, paye, chambre.id_chambre
     FROM reservation INNER JOIN chambre ON chambre.id_chambre=reservation.id_chambre
     INNER JOIN acc_hotel ON chambre.id_hotel=acc_hotel.id_hotel WHERE id_user = ?`, [id], (err, results) => {
             if (err) {

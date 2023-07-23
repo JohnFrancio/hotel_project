@@ -20,6 +20,12 @@ export const paiement = {
 		}
 	},
 	actions: {
+		async getAllPaiement({ commit }){
+			const response = await axios.get(`http://localhost:8081/paiement`)
+			commit('setAllPaiement', response.data)
+			console.log(response)
+			return response.data
+		},
 		async updateRef({ commit }, id){
 			const response = await axios.get(`http://localhost:8081/paiement/${id}`)
 			const datas = await axios.get(`http://localhost:8081/paiement/info/${id}`)
@@ -32,12 +38,21 @@ export const paiement = {
 				prix: credentials.prix,
 				contact_user: credentials.contact_user
 			})
+			console.log(response)
 			return response.data.fieldCount
 		},
+		async deletePaiement({ commit }, id){
+			const response = await axios.delete(`http://localhost:8081/paiement/${id}`)
+			commit('removePaiement', id)
+		}
 	},
 	mutations: {
 		setPaiement: (state, paiement) => {
 			return state.singlePaiement = paiement[0]
-		}
+		},
+		setAllPaiement: (state, paiement) => {
+			return state.paiement = paiement
+		},
+		removePaiement:(state, id) => state.paiement = state.paiement.filter((paiement) => paiement.id_paiement !== id)
 	}
 }

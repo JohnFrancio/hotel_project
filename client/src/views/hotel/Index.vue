@@ -164,7 +164,8 @@
 	      	<v-card>
 	      		<v-card-text>
               <v-form @submit.prevent="addRoom" class="px-5" ref="form"> 
-              	<h3 class="text-center mb-3" >Ajout d'une chambre pour {{ user.nom_hotel }}</h3>
+              	<h3 v-if="add == true" class="text-center mb-3" >Ajout d'une chambre pour {{ profil.nom_hotel }}</h3>
+              	<h3 v-if="add == false" class="text-center mb-3">Modification chambre pour {{ profil.nom_hotel }}</h3>
               	<v-divider class="mb-3"></v-divider>
               	<h4>Le nombre de personne: <br>
               		<v-radio-group inline :rules="[(this.nbr_pers == 0) ? 'Choisir une personne' : true]" v-model="nbr_pers">
@@ -209,26 +210,29 @@
                     </v-col>
                  </v-row>
               	<v-card-actions>
-              		<div class="text-center">
+              		<div class="mx-auto">
               			<v-btn
               					v-if="add == true"
                         @click="addRoom"
-                        class="text-white mt-3 mx-5"
+                        variant="text"
+                        class="text-white mx-5"
                         style="background-color:#0862a0;"
                         >
                         Envoyer
                       </v-btn>
                       <v-btn
               					v-if="add == false"
+                        variant="text"
                         @click="editRoom"
-                        class="text-white mt-3 mx-5"
+                        class="text-white mx-5"
                         style="background-color:#0862a0;"
                         >
                         Modifier
                       </v-btn>
                      <v-btn
                       @click="closeAddRoom"
-                      class="text-white mt-3"
+                       variant="text"
+                      class="text-white"
                       style="background-color:orange;"
                       >
                       	Fermer
@@ -240,6 +244,20 @@
 	      	</v-card>
 	      </v-dialog>
 	    </v-main>
+	    <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="successCham"
+        >
+          Chambre ajoutee avec <strong>succes</strong>.
+        </v-snackbar>
+        <v-snackbar
+          :timeout="3000"
+          color="success"
+          v-model="successPhoto"
+        >
+          Photo ajoutee avec <strong>succes</strong>.
+        </v-snackbar>
 	</v-app>
 </template>
 
@@ -259,6 +277,8 @@ export default{
 	},
 	data (){
 		return{
+			successCham: false,
+			successPhoto: false,
 			img_hotel: null,
 			add:true,
 			id_chambre: null,
@@ -306,6 +326,7 @@ export default{
 	      	if(response != undefined){
 	      		this.dialog2 = false
 		      	this.img_hotel = null
+		      	this.successPhoto = true
 		      }
 	      }
       },
@@ -323,7 +344,7 @@ export default{
 	      	form.append('id_hotel', this.profil.id_hotel)
 	      	const credentials = {
 	      		form,
-	      		id: this.profil[0].id_hotel
+	      		id: this.profil.id_hotel
 	      	}
 	      	const response = await this.addRooms(credentials)
 	      	console.log(response)
@@ -336,6 +357,7 @@ export default{
 						this.nbr_tele = 0
 						this.prix = null
 			    	this.img_chambre = null
+			    	this.successCham = true
 	      	}else{
 	      		alert("Taille de la photo trop grande.")
 	      	}
@@ -381,7 +403,7 @@ export default{
 	      	const credentials = {
 	      		form,
 	      		id: this.id_chambre,
-	      		id_hotel: this.profil[0].id_hotel
+	      		id_hotel: this.profil.id_hotel
 	      	}
 	      	const response = await this.updateRoom(credentials)
 	      	console.log(response)

@@ -25,9 +25,7 @@ export const room = {
 			}
 			return count
 		},
-		getAllRooms: (state) => {
-			return state.allRooms
-		},
+		getAllRooms: (state) => (state.allRooms),
 		getRoomReserve: (state) => {
 			return state.roomReserve
 		}
@@ -141,9 +139,9 @@ export const room = {
 		}
 	},
 	mutations: {
-		setAllRooms: (state, rooms) => (state.allRooms = rooms),
+		setAllRooms: (state, room) => (state.allRooms = room),
 		setRoomReserve: (state, room) => {
-			(state.roomReserve = room)
+			return state.roomReserve = room
 			// return state.roomReserve = state.roomReserve.map((item) => item.id_chambre !== room[0].id_hotel ? item : room[0])
 		},
 		setRooms: (state, room) => (state.rooms = room),
